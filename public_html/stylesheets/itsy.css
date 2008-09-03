@@ -1,0 +1,17 @@
+/*** Itsy Styles ***/
+
+#itsy-development {
+  font-size: 1em;
+  background-color: #eeeeee;
+  padding: 4px 8px 4px 8px;
+  position: absolute;
+  border: 5px solid #999;
+}
+
+#itsy-development h1 {
+  font-size: 1.4em;
+}
+
+#itsy-development div.indent {
+  margin-left: 20px;
+}
