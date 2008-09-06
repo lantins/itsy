@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title><?= $title ?></title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/default.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/itsy.css" />
+</head>
+<html>
+<body>
+  <h1>Itsy PHP Framework</h1>
+  <hr />
+  <?= itsy::partial('default', '_menu'); ?>
+  <hr />
+  <?= $view_content ?>
+  <hr />
+  <p>This is some more text in my layout.</p>
+  
+  <!-- ITSY DEVELOPMENT -->
+  <div id="itsy-development">
+    <h1>Log</h1>
+    <div class="indent">
+      <pre><? foreach($itsy_log_dev as $message): echo $message . "\n"; endforeach; ?></pre>
+    </div>
+
+    <h1>_GET</h1>
+    <div class="indent">
+      <pre><? print_r($_GET)?></pre>
+    </div>
+
+    <h1>_POST</h1>
+    <div class="indent">
+      <pre><? print_r($_POST)?></pre>
+    </div>
+
+    <h1>_COOKIE</h1>
+    <div class="indent">
+      <pre><? print_r($_COOKIE)?></pre>
+    </div>
+  </div>
+</body>
+</html>

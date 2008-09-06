@@ -1,0 +1,27 @@
+div#flash {
+  margin: 0px auto 0px auto;
+  width: 950px
+}
+
+div#flash div {
+  color: #ffffff;
+  font-weight: bold;
+  margin: 20px 10px;
+  padding: 5px;
+  width: auto;
+}
+
+div#flash div.notice {
+  background: #006600;
+  border: 3px solid #00cc00;
+}
+
+div#flash div.message {
+  background: #3333ff;
+  border: 3px solid #33aaff;
+}
+
+div#flash div.warning {
+  background: #cc0000;
+  border: 3px solid #ff0000;
+}
