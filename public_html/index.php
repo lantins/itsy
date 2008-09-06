@@ -18,8 +18,8 @@ ini_set('display_errors', TRUE);
 define('ROOT_PATH', dirname(getcwd()) . '/');
 require_once ROOT_PATH . 'lib/itsy/bootstrap.php';
 
-itsy::$db['itsy'] = new itsy_db();
-itsy::$db['itsy']->connect('itsy');
+//itsy::$db['itsy'] = new itsy_db();
+//itsy::$db['itsy']->connect('itsy');
 
 $controller = empty($_GET['c']) ? 'default' : $_GET['c'];
 $action = empty($_GET['a']) ? 'index' : $_GET['a'];
