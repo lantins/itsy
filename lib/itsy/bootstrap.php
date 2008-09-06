@@ -14,11 +14,11 @@
 define('ITSY_VERSION',  '1.0');
 
 // Define path to core ITSY files
-define('ITSY_PATH', ROOT_PATH . 'lib/itsy/');
+define('ITSY_PATH', dirname(__FILE__) . '/');
 
 // Load core files
 require_once ITSY_PATH . 'itsy.class.php';
-require_once ROOT_PATH . 'lib/itsy/helpers.php';
+require_once ITSY_PATH . 'helpers.php'; // TODO: Change how we load helpers.
 
 itsy::setup();
 

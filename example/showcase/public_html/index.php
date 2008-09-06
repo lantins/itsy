@@ -16,7 +16,7 @@ ini_set('display_errors', TRUE);
  *   Gets things rolling.
  */
 define('ROOT_PATH', dirname(getcwd()) . '/');
-require_once ROOT_PATH . 'lib/itsy/bootstrap.php';
+require_once ROOT_PATH . '../../lib/itsy/bootstrap.php';
 
 //itsy::$db['itsy'] = new itsy_db();
 //itsy::$db['itsy']->connect('itsy');
