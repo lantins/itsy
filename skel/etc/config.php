@@ -4,7 +4,6 @@
  * APPLICATION CONFIGURATION
  *   Configuration used by Itsy.
  */
- 
 $config = array();
 $config['environment'] = 'development'; // 'development' or 'production'.
 $config['controller_dir'] = 'app/controllers/'; // where to find the controller files.
@@ -14,16 +13,16 @@ $config['layout_dir'] = 'app/layouts/'; // where to find the layout files.
 // database config
 $config['db'] = array(
   'development' => array(
-    'itsy' => array(
-      'user' => 'root',
-      'pass' => 'root',
+    'database_lable' => array(
+      'user' => 'development_username',
+      'pass' => 'development_password',
       'host' => 'localhost'
     )
   ),
   'production' => array(
-    'itsy' => array(
-      'user' => 'itsy',
-      'pass' => 'moo',
+    'database_lable' => array(
+      'user' => 'production_username',
+      'pass' => 'production_password',
       'host' => 'localhost'
       )
     )
