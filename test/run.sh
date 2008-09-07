@@ -1,3 +1,6 @@
 #!/bin/bash
+FROM_DIR=`pwd`
 DIR=`dirname $0`
-phpunit itsy_framework_suite $DIR/itsy_framework_suite.php
+cd $DIR;
+phpunit itsy_framework_suite itsy_framework_suite.php
+cd $FROM_DIR;

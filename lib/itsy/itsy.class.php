@@ -173,7 +173,6 @@ abstract class itsy
         
         // TODO: look for class file in the libs dir.
         
-        
         return class_exists($class, false);
     }
     
@@ -181,7 +180,7 @@ abstract class itsy
     {
       switch ($kind) {
         case 'dev': {
-          if (empty(itsy::$config['environment']) != true && itsy::$config['environment'] == 'development') {
+          if (!empty(itsy::$config['environment']) && itsy::$config['environment'] == 'development') {
             array_push(itsy::$log_dev, $message);
           }
           break;
