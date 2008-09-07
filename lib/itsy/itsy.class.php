@@ -17,17 +17,42 @@ abstract class itsy
     {
       itsy::log("<b>CORE - Starting Itsy</b>", 'dev');
       
+      itsy::load_config();
+      
+      spl_autoload_register(array('itsy', 'autoloader'));
+      set_exception_handler('itsy_exception_handler');
+    }
+    
+    // opposite to setup method.
+    public static function shutdown()
+    {
+      itsy::$config = array();
+      spl_autoload_unregister(array('itsy', 'autoloader'));
+      restore_exception_handler();
+    }
+    
+    // load the config file; override the default config if needed.
+    // stick the final config into itsy::$config
+    private static function load_config()
+    {
+      // default config settings.
       $default_config = array(
         'environment' => 'production'
       );
       
       // load the config file to get the $config var.
-      require_once ROOT_PATH . 'etc/config.php';
+      $file = ROOT_PATH . 'etc/config.php';
+      if (!file_exists($file) || !is_readable($file)) {
+        return;
+      }
       
-      itsy::$config = array_merge($default_config, $config);
+      require_once $file;
       
-      spl_autoload_register(array('itsy', 'autoloader'));
-      set_exception_handler('itsy_exception_handler');
+      if (is_array($config)) {
+        itsy::$config = array_merge($default_config, $config);
+      } else {
+        itsy::$config = $default_config;
+      }
     }
     
     public static function partial($controller, $action = '', $param = null)
@@ -135,6 +160,7 @@ abstract class itsy
         }
         
         // look for a class type.
+        // foo_bar will become foo/bar.class.php
         if (($class_name = strpos($class, '_')) !== false) {
             // a class suffix is set, this will be our type.
             $lib_dir = substr_replace($class, '', $class_name);
@@ -144,9 +170,10 @@ abstract class itsy
               require_once($class_file);
             }
         }
-
-        // look for class file in the libs dir.
-
+        
+        // TODO: look for class file in the libs dir.
+        
+        
         return class_exists($class, false);
     }
     
@@ -154,7 +181,7 @@ abstract class itsy
     {
       switch ($kind) {
         case 'dev': {
-          if (empty(itsy::$config['environment']) || itsy::$config['environment'] == 'development') {
+          if (empty(itsy::$config['environment']) != true && itsy::$config['environment'] == 'development') {
             array_push(itsy::$log_dev, $message);
           }
           break;
