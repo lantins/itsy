@@ -11,13 +11,7 @@ abstract class itsy
     public static $config = array();
     public static $log_dev = array();
     public static $db = array();
-
-    // constructor
-    function __construct()
-    {
-        # code...
-    }
-
+    
     // main setup method.
     public static function setup()
     {
@@ -27,14 +21,13 @@ abstract class itsy
         'environment' => 'production'
       );
       
-        // load the config file to get the $config var.
-        require_once ROOT_PATH . 'etc/config.php';
-        
-        itsy::$config = array_merge($default_config, $config);
-        
-
-        spl_autoload_register(array('itsy', 'autoloader'));
-        set_exception_handler('itsy_exception_handler');
+      // load the config file to get the $config var.
+      require_once ROOT_PATH . 'etc/config.php';
+      
+      itsy::$config = array_merge($default_config, $config);
+      
+      spl_autoload_register(array('itsy', 'autoloader'));
+      set_exception_handler('itsy_exception_handler');
     }
     
     public static function partial($controller, $action = '', $param = null)
@@ -192,7 +185,6 @@ function itsy_exception_handler($e)
   if (itsy::$config['environment'] == 'development') {
     itsy::dispatch('itsy_error', '_exception', $param);
   } else {
-    
     // if its a db error, show a 503
     if (get_class($e) == 'itsy_db_exception') {
       itsy::dispatch('itsy_error', '_error503');
