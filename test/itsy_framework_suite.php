@@ -8,32 +8,52 @@ define('ITSY_PATH', ROOT_PATH . 'lib/itsy/');
 
 date_default_timezone_set('Europe/London');
 
+// phpunit
 require_once 'PHPUnit/Framework.php';
-require_once ROOT_PATH . 'test/itsy/all_tests.php';
-#require_once ROOT_PATH . 'test/itsy_controller/all_tests.php';
-#require_once ROOT_PATH . 'test/itsy_db/all_tests.php';
-#require_once ROOT_PATH . 'test/itsy_error/all_tests.php';
-#require_once ROOT_PATH . 'test/itsy_filter/all_tests.php';
-#require_once ROOT_PATH . 'test/itsy_flash/all_tests.php';
-#require_once ROOT_PATH . 'test/itsy_registry/all_tests.php';
-#require_once ROOT_PATH . 'test/itsy_request/all_tests.php';
-#require_once ROOT_PATH . 'test/itsy_validate/all_tests.php';
+
+class itsy_framework_testsuite extends PHPUnit_Framework_TestSuite
+{
+  public function addAllTestFromDir()
+  {
+    $name = get_class($this);
+    $name = str_replace('_suite', '', $name);
+    $dir = getcwd() . '/' . $name;
+    
+    // find all the .test.php files in the cwd.
+    $files = scandir($dir);
+    
+    foreach ($files as $file) {
+      if (ereg('\.test\.php$', $file)) {
+        require_once $dir . '/' . $file;
+        
+        $suite_name = str_replace('.test.php', '', $file);
+        $suite_name = 'test_' . $name . '_' . $suite_name;
+        $this->addTestSuite($suite_name);
+      }
+    }
+  }
+}
 
 class itsy_framework_suite extends PHPUnit_Framework_TestSuite
 {
   public static function suite()
   {
+    $test_suites = array(
+      'itsy', 'itsy_controller', 'itsy_db', 'itsy_error', 'itsy_filter',
+      'itsy_flash', 'itsy_registry', 'itsy_request', 'itsy_validate'
+      );
+    
     $suite = new itsy_framework_suite('Itsy Framework');
-    $suite->addTest(itsy_suite::suite());
-    #$suite->addTest(itsy_controller_suite::suite());
-    #$suite->addTest(itsy_db_suite::suite());
-    #$suite->addTest(itsy_error_suite::suite());
-    #$suite->addTest(itsy_filter_suite::suite());
-    #$suite->addTest(itsy_flash_suite::suite());
-    #$suite->addTest(itsy_registry_suite::suite());
-    #$suite->addTest(itsy_request_suite::suite());
-    #$suite->addTest(itsy_validate_suite::suite());
-
+    
+    foreach ($test_suites as $test_suite) {
+      $suite_file = ROOT_PATH . "test/$test_suite/all.php";
+      if (is_readable($suite_file)) {
+        require_once $suite_file;
+        $call = call_user_func(array($test_suite . '_suite', 'suite'));
+        $suite->addTestSuite($call);
+      }
+    }
+    
     return $suite;
   }
   

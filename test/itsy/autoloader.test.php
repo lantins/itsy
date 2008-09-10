@@ -1,8 +1,12 @@
 <?php
-require_once 'PHPUnit/Framework.php';
- 
+
 class test_itsy_autoloader extends PHPUnit_Framework_TestCase
 {
+  protected function setUp()
+  {
+    itsy::shutdown();
+  }
+  
   protected function tearDown()
   {
     itsy::shutdown();
@@ -10,6 +14,7 @@ class test_itsy_autoloader extends PHPUnit_Framework_TestCase
   
   public function test_autoloader_is_registered()
   {
+    itsy::shutdown();
     $this->assertFalse(spl_autoload_functions(), 'autoload stack should not be activated.');
     
     itsy::setup();

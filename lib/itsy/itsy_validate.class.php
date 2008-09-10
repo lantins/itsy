@@ -6,7 +6,7 @@
  * http://www.lividpenguin.com/
  */
 
-static class itsy_validate
+abstract class itsy_validate
 {
   // alphabetical characters
   static public function alpha($string)
