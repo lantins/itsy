@@ -180,7 +180,7 @@ abstract class itsy
     {
       switch ($kind) {
         case 'dev': {
-          if (!empty(itsy::$config['environment']) && itsy::$config['environment'] == 'development') {
+          if (! empty(itsy::$config['environment']) && itsy::$config['environment'] == 'development') {
             array_push(itsy::$log_dev, $message);
           }
           break;
