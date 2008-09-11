@@ -1,6 +1,5 @@
 <?php
-require_once 'PHPUnit/Framework.php';
- 
+
 class test_itsy_db_connect extends PHPUnit_Framework_TestCase
 {
   public function test_basic()

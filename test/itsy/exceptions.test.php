@@ -1,6 +1,5 @@
 <?php
-require_once 'PHPUnit/Framework.php';
- 
+
 class test_itsy_exceptions extends PHPUnit_Framework_TestCase
 {
   public function test_exception_basic()

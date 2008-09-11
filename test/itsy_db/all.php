@@ -1,6 +1,6 @@
 <?php
 
-require_once ROOT_PATH . 'lib/itsy/itsy_db.class.php';
+require_once TEST_ROOT_PATH . 'lib/itsy/itsy_db.class.php';
 
 class itsy_db_suite extends itsy_framework_testsuite
 {

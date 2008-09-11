@@ -1,7 +1,5 @@
 <?php
 
-require_once 'PHPUnit/Framework.php';
-
 class test_itsy_log extends PHPUnit_Framework_TestCase
 {
   
