@@ -54,7 +54,6 @@ abstract class itsy
   {
     itsy::log("<b>CORE - Partial:</b> controller: $controller, action: $action, " . 
               "param: $param", 'dev');
-              
     return itsy::dispatch($controller, $action, $param, $partial = true, $itsy = false);
   }
   
@@ -93,13 +92,9 @@ abstract class itsy
             return;
             break;
           }
-          
-          default: {
-            break;
-          }
         }
       }
-
+      
       // render the view.
       $control->_render($action, $itsy);
               

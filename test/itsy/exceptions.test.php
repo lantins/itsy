@@ -10,6 +10,9 @@ class test_itsy_exceptions extends PHPUnit_Framework_TestCase
   
   public function test_exception_real()
   {
+    $original_app_path = itsy_registry::get('/itsy/app_path');
+    itsy_registry::set('/itsy/app_path', '/dev/null');
+
     try {
       throw new itsy_exception('Test exception.');
     } catch (itsy_exception $e) {
@@ -36,9 +39,11 @@ class test_itsy_exceptions extends PHPUnit_Framework_TestCase
           itsy::itsy_exception_handler($e);
         } catch (itsy_exception $e) {
           $this->assertEquals('The view "_error503" was not found', $e->getMessage());
-          return;
         }
       }
+      
+      itsy_registry::set('/itsy/app_path', $original_app_path);
+      return;
     }
     $this->fail('An expected exception has not been raised.');
   }

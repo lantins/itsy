@@ -10,6 +10,7 @@ class test_itsy_autoloader extends PHPUnit_Framework_TestCase
   protected function tearDown()
   {
     itsy::shutdown();
+    itsy::setup(); // on the final tearDown this will keep itsy ready for the other tests.
   }
   
   /**

@@ -71,7 +71,6 @@ class itsy_controller
       $controller = str_replace('controller', '', get_class($this));
       $controller_view_dir = str_replace('_', '/', $controller);
       $view_file = itsy_registry::get('/itsy/app_path') . itsy_registry::get('/itsy/view_path') . $controller_view_dir . $this->_view . '.phtml';
-      
       if (is_readable($view_file)) {
         ob_start();
         include($view_file);
@@ -99,7 +98,6 @@ class itsy_controller
     
     function _forward($controller, $action) {
       itsy::log("<b>CONTROLLER - " . get_class($this) . " - Forward:</b> controller: $controller, action: $action", 'dev');
-      
       return array('directive' => 'forward', 'controller' => $controller, 'action' => $action);
     }
 }
