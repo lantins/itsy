@@ -23,8 +23,8 @@ require_once ITSY_PATH . 'itsy_error.class.php';
 require_once ITSY_PATH . 'itsy_filter.class.php';
 require_once ITSY_PATH . 'itsy_flash.class.php';
 require_once ITSY_PATH . 'itsy_registry.class.php';
-require_once ITSY_PATH . 'itsy_registry.class.php';
-require_once ITSY_PATH . 'itsy_validate.class.php';
+require_once ITSY_PATH . 'itsy_request.class.php';
+//require_once ITSY_PATH . 'itsy_validate.class.php'; // we will load this to test the autoloader.
 
 class itsy_framework_testsuite extends PHPUnit_Framework_TestSuite
 {

@@ -17,21 +17,19 @@ class test_itsy_autoloader extends PHPUnit_Framework_TestCase
    */
   public function test_autoloader($class)
   {
-    $this->markTestIncomplete('This test has not been implemented yet.');
-
-    $this->assertFalse(spl_autoload_functions(), 'autoload stack should not be activated.');
+    $this->assertEquals(array(), spl_autoload_functions(), 'autoload stack should not be activated.');
     $this->assertFalse(class_exists($class));
+    echo "$class\n";
     itsy::setup();
     $this->assertTrue(class_exists($class));
     
     $expected_result = array(array('itsy', 'autoloader'));
-    $autoloaded_activated = ($expected_result == spl_autoload_functions());
-    $this->assertTrue($autoloaded_activated, 'itsy autoloader registerd in the autoload stack.');
+    $this->assertEquals($expected_result, spl_autoload_functions(), 'itsy should be autoloader registerd in the autoload stack.');
   }
   
   public static function provider()
   {
-    return array(array('itsy_controller'));
+    return array(array('itsy_validate'));
   }
   
   // try to load the class: foo_bar
