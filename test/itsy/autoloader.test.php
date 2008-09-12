@@ -19,10 +19,9 @@ class test_itsy_autoloader extends PHPUnit_Framework_TestCase
   {
     $this->assertEquals(array(), spl_autoload_functions(), 'autoload stack should not be activated.');
     $this->assertFalse(class_exists($class));
-    echo "$class\n";
+    
     itsy::setup();
     $this->assertTrue(class_exists($class));
-    
     $expected_result = array(array('itsy', 'autoloader'));
     $this->assertEquals($expected_result, spl_autoload_functions(), 'itsy should be autoloader registerd in the autoload stack.');
   }
