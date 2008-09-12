@@ -35,8 +35,6 @@ class test_itsy_registry_basic extends PHPUnit_Framework_TestCase
     itsy_registry::delete('/basic/test/bar/cats_say');
     $this->assertEquals(null, itsy_registry::get('/basic/test/bar/cats_say'));
     
-    echo "end of cats say; meow.\n";
-    
     itsy_registry::delete('/basic/test/');
     $this->assertEquals(null, itsy_registry::get('/basic/test/foo'));
     $this->assertEquals(null, itsy_registry::get('/basic/test/bar'));
