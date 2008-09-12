@@ -33,7 +33,7 @@ abstract class itsy_validate
   }
   
   // letters, numbers, whitespace, dashes, periods, and underscores
-  static public function standard_text($text)
+  static public function text($text)
   {
     
   }

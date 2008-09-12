@@ -1,34 +1,34 @@
 <?php
 
-class test_itsy_validate_basic extends PHPUnit_Framework_TestCase
+class test_itsy_filter_basic extends PHPUnit_Framework_TestCase
 {
   public function test_alpha()
   {
-    itsy_validate::alpha('abc');
+    itsy_filter::alpha('abc');
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
   
   public function test_numeric()
   {
-    itsy_validate::numeric(123);
+    itsy_filter::numeric(123);
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
   
   public function test_alpha_numeric()
   {
-    itsy_validate::alpha_numeric('abc123');
+    itsy_filter::alpha_numeric('abc123');
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
   
   public function test_digit()
   {
-    itsy_validate::digit(0.0);
+    itsy_filter::digit(0.0);
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
   
   public function test_text()
   {
-    itsy_validate::text('foobar');
+    itsy_filter::text('foobar');
     $this->markTestIncomplete('This test has not been implemented yet.');
   }
 
