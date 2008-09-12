@@ -13,11 +13,11 @@ class itsy_request
   private $_post;
   private $_cookie;
   
-  function __construct()
+  function __construct($_get = array(), $_post = array(), $_cookie = array())
   {
-    $this->_get = $_GET;
-    $this->_post = $_POST;
-    $this->_cookie = $_COOKIE;
+    $this->_get = ($_GET) ? $_GET : $_get;
+    $this->_post = ($_POST) ? $_POST : $_post;
+    $this->_cookie = ($_COOKIE) ? $_COOKIE : $_cookie;
     
     // we dont want php fooling around.
     if (get_magic_quotes_gpc()) {

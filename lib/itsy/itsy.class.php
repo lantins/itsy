@@ -206,7 +206,10 @@ abstract class itsy
  */
 class itsy_exception extends Exception
 {
-  
+  function __construct($message = null, $code = 0)
+  {
+    parent::__construct($message, $code);
+  }
 }
 
 ?>
