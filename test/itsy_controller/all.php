@@ -1,7 +1,5 @@
 <?php
 
-require_once TEST_ROOT_PATH . 'lib/itsy/itsy.class.php';
-
 class itsy_controller_suite extends itsy_framework_testsuite
 {
   public static function suite()

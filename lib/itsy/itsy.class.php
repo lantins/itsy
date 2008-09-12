@@ -8,7 +8,6 @@
 
 abstract class itsy
 {
-    public static $config = array();
     public static $log_dev = array();
     public static $db = array();
     
@@ -17,28 +16,33 @@ abstract class itsy
     {
       itsy::log("<b>CORE - Starting Itsy</b>", 'dev');
       
-      itsy::load_config();
-      
       spl_autoload_register(array('itsy', 'autoloader'));
       set_exception_handler('itsy_exception_handler');
+      
+      itsy::load_config();
+      
     }
     
     // opposite to setup method.
     public static function shutdown()
     {
-      itsy::$config = array();
+      itsy_registry::delete('/');
       spl_autoload_unregister(array('itsy', 'autoloader'));
       restore_exception_handler();
     }
     
-    // load the config file; override the default config if needed.
-    // stick the final config into itsy::$config
+    // load the config file that will override any defaults.
     private static function load_config()
     {
       // default config settings.
-      $default_config = array(
-        'environment' => 'production'
-      );
+      itsy_registry::delete('/');
+      $defaults = array(
+        '/itsy/environment' => 'development',
+        '/itsy/controller_path' => 'app/controllers/',
+        '/itsy/view_path' => 'app/views/',
+        '/itsy/layout_path' => 'app/layouts/',
+        );
+      itsy_registry::load($defaults);
       
       // load the config file to get the $config var.
       $file = ROOT_PATH . 'etc/config.php';
@@ -47,12 +51,6 @@ abstract class itsy
       }
       
       require_once $file;
-      
-      if (is_array($config)) {
-        itsy::$config = array_merge($default_config, $config);
-      } else {
-        itsy::$config = $default_config;
-      }
     }
     
     public static function partial($controller, $action = '', $param = null)
@@ -127,7 +125,7 @@ abstract class itsy
       $controller_classname = $controller;
       $controller = str_replace('_controller', '', $controller);
       $file_loc = str_replace('_', '/', $controller);
-      $file = ROOT_PATH . itsy::$config['controller_dir'] . $file_loc . '.php';
+      $file = ROOT_PATH . itsy_registry::get('/itsy/controller_path') . $file_loc . '.php';
       
       if (file_exists($file)) {
         require_once($file);
@@ -145,42 +143,46 @@ abstract class itsy
      */
     public static function autoloader($class)
     {
-      itsy::log("<b>CORE - Auto Loader:</b> $class", 'dev');
-        // check the class is not already loaded
-        if (class_exists($class, false)) {
-            return true;
+      // check the class is not already loaded
+      if (class_exists($class, false)) {
+          return true;
+      }
+      
+      // check if the class name starts with itsy_
+      if ((strrpos($class, 'itsy_')) !== false) {
+        $class_file = ITSY_PATH . $class . '.class.php';
+        if (is_readable($class_file) && file_exists($class_file)) {
+          require_once($class_file);
         }
-        
-        // check if the class name starts with itsy_
-        if ((strrpos($class, 'itsy_')) !== false) {
-          $class_file = ITSY_PATH . $class . '.class.php';
+      }
+      
+      // look for a class type.
+      // foo_bar will become foo/bar.class.php
+      if (($class_name = strpos($class, '_')) !== false) {
+          // a class suffix is set, this will be our type.
+          $lib_dir = substr_replace($class, '', $class_name);
+          $class_name = substr($class, $class_name + 1);
+          $class_file = ROOT_PATH.'lib/'.$lib_dir.'/'.$class_name . '.class.php';
           if (is_readable($class_file) && file_exists($class_file)) {
             require_once($class_file);
           }
-        }
-        
-        // look for a class type.
-        // foo_bar will become foo/bar.class.php
-        if (($class_name = strpos($class, '_')) !== false) {
-            // a class suffix is set, this will be our type.
-            $lib_dir = substr_replace($class, '', $class_name);
-            $class_name = substr($class, $class_name + 1);
-            $class_file = ROOT_PATH.'lib/'.$lib_dir.'/'.$class_name . '.class.php';
-            if (is_readable($class_file) && file_exists($class_file)) {
-              require_once($class_file);
-            }
-        }
-        
-        // TODO: look for class file in the libs dir.
-        
-        return class_exists($class, false);
+      }
+      //itsy::log("<b>CORE - Auto Loader:</b> $class", 'dev');
+      
+      // TODO: look for class file in the libs dir.
+      
+      return class_exists($class, false);
     }
     
     public static function log($message, $kind = 'info')
     {
+      if (method_exists('itsy_registry','get') == false) {
+        return;
+      }
+      
       switch ($kind) {
         case 'dev': {
-          if (! empty(itsy::$config['environment']) && itsy::$config['environment'] == 'development') {
+          if (itsy_registry::get('/itsy/environment') == 'development') {
             array_push(itsy::$log_dev, $message);
           }
           break;
@@ -208,7 +210,7 @@ function itsy_exception_handler($e)
   $param['code'] = $e->getCode();
   $param['trace'] = $e->getTraceAsString();
   
-  if (itsy::$config['environment'] == 'development') {
+  if (itsy_registry::get('/itsy/environment') == 'development') {
     itsy::dispatch('itsy_error', '_exception', $param);
   } else {
     // if its a db error, show a 503

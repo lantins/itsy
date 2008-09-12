@@ -70,7 +70,7 @@ class itsy_controller
       // grab the view output
       $controller = str_replace('controller', '', get_class($this));
       $controller_view_dir = str_replace('_', '/', $controller);
-      $view_file = ROOT_PATH . itsy::$config['view_dir'] . $controller_view_dir . $this->_view . '.phtml';
+      $view_file = itsy_registry::get('/itsy/app_path') . itsy_registry::get('/itsy/view_path') . $controller_view_dir . $this->_view . '.phtml';
       
       if (is_readable($view_file)) {
         ob_start();
@@ -89,12 +89,12 @@ class itsy_controller
       itsy::log("<b>CONTROLLER - " . get_class($this) . " - Render Layout</b>", 'dev');
       
       $vars = get_object_vars($this);
-      if (itsy::$config['environment'] == 'development') {
+      if (itsy_registry::get('/itsy/environment') == 'development') {
         $vars['itsy_log_dev'] = itsy::$log_dev;
       }
       extract($vars, EXTR_REFS); // bring the class vars into scope for the layout.
 
-      @include(ROOT_PATH . itsy::$config['layout_dir'] . $this->_layout . '.phtml');
+      @include(itsy_registry::get('/itsy/app_path') . itsy_registry::get('/itsy/layout_path') . $this->_layout . '.phtml');
     }
     
     function _forward($controller, $action) {

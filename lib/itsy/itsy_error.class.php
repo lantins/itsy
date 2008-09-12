@@ -14,9 +14,6 @@ class itsy_error
 {
   private $messages; // store array of attributes and their error messages.
   
-  /**
-   * 
-   */
   function __construct()
   {
     $this->messages = array();
@@ -38,32 +35,40 @@ class itsy_error
   /**
    * Removes all errors that have been added.
    */
-  public function clear()
+  public function clear($attribute = '')
   {
-    $this->message = array();
-    return true;
+    if (array_key_exists($attribute, $this->messages) && $attribute != '') {
+      $this->messages[$attribute] = array();
+      return;
+    }
+    
+    $this->messages = array();
   }
   
   /**
    * Count the number of errors.
    * This includes multiple errors for one attribute.
    */
-  public function count()
+  public function count($attribute = '')
   {
-    $total = 0;
-    foreach ($this->messages as $message) {
-      $count = count($message, COUNT_RECURSIVE);
-      $total += $count;
+    if (array_key_exists($attribute, $this->messages) && $attribute != '') {
+      return count($this->messages[$attribute]);
     }
+    
+    $total = 0;
+    foreach ($this->messages as $attribute) {
+      $total += count($attribute);
+    }
+    
     return $total;
   }
   
   /**
    * Grab the error(s) for a spesific attribute.
    */
-  public function on($attribute)
+  public function on($attribute = '')
   {
-    if (array_key_exists($attribute, $this->messages)) {
+    if (array_key_exists($attribute, $this->messages) && $attribute != '') {
       // we found a key, now lets get the errors.
       return $this->messages[$attribute];
     }
@@ -72,21 +77,14 @@ class itsy_error
   /**
    * Return an array of all errors.
    */
-  public function all($messages_only = true)
+  public function on_all()
   {
     // make sure we got some errors to return.
-    if ($this->count() < 0) {
-      return false;
-    }
-
-    // were returning all the error information. for all attributes.
-    if ($messages_only == false) {
-      return $this->messages;
-    } else { // were returning just the error messages.
-      
+    if ($this->count() == 0) {
+      return array();
     }
     
-    return false;
+    return $this->messages;
   }
 }
 

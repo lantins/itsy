@@ -17,6 +17,8 @@ class test_itsy_autoloader extends PHPUnit_Framework_TestCase
    */
   public function test_autoloader($class)
   {
+    $this->markTestIncomplete('This test has not been implemented yet.');
+
     $this->assertFalse(spl_autoload_functions(), 'autoload stack should not be activated.');
     $this->assertFalse(class_exists($class));
     itsy::setup();

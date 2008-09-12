@@ -19,13 +19,12 @@
  *   - all ... this is a special namespace, it will affect all namespaces.
  *     (apart form when your adding a new message).
  */
-class itsy_flash
+abstract class itsy_flash
 {
   // add a message to a namespace.
   public static function add($namespace = 'message', $message)
   {
-    itsy_flash::check_session();
-    
+    itsy_flash::init_session();
     $_SESSION['itsy_flash'][$namespace][] = $message;
     
     return true;
@@ -34,25 +33,32 @@ class itsy_flash
   // discard message(s) for a namespace
   public static function discard($namespace = 'all')
   {
-    itsy_flash::check_session();
-    unset($_SESSION['itsy_flash']);
-    itsy_flash::check_session();
+    $messages = itsy_flash::init_session();
+    
+    if ($namespace == 'all') {
+      unset($_SESSION['itsy_flash']);
+    }
+    
+    if (array_key_exists($namespace, $messages)) {
+      if (is_array($messages[$namespace])) {
+        unset($messages[$namespace]);
+      }
+    }
   }
   
   // get the messages for a namespace
   public static function get($namespace = 'all')
   {
-    itsy_flash::check_session();
+    $messages = itsy_flash::init_session();
     
-    $messages = $_SESSION['itsy_flash'];
-    itsy_flash::discard();
-    
-    if ($namespace = 'all') {
+    if ($namespace == 'all') {
+      itsy_flash::discard();
       return $messages;
     }
     
     if (array_key_exists($namespace, $messages)) {
       if (is_array($messages[$namespace])) {
+        itsy_flash::discard($namespace);
         return $messages[$namespace];
       }
     }
@@ -62,17 +68,14 @@ class itsy_flash
   }
   
   // check we have somewhere for our flash data in the session.
-  private static function check_session()
+  private static function init_session()
   {
     if (isset($_SESSION['itsy_flash']) == false) {
       $_SESSION['itsy_flash'] = array();
     }
     
-    if (isset($_SESSION['itsy_flash'])) {
-      return true;
-    }
-    
-    return false;
+    // perhaps throw an exception if were unable to save session data?
+    return $_SESSION['itsy_flash'];
   }
 }
 

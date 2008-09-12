@@ -8,8 +8,23 @@ define('ITSY_PATH', TEST_ROOT_PATH . 'lib/itsy/');
 
 date_default_timezone_set('Europe/London');
 
+// setup itsy
+define('ROOT_PATH', TEST_ROOT_PATH . 'example/showcase/');
+require_once ITSY_PATH . 'bootstrap.php';
+
 // phpunit
 require_once 'PHPUnit/Framework.php';
+
+// itsy files
+require_once ITSY_PATH . 'itsy.class.php';
+require_once ITSY_PATH . 'itsy_controller.class.php';
+require_once ITSY_PATH . 'itsy_db.class.php';
+require_once ITSY_PATH . 'itsy_error.class.php';
+require_once ITSY_PATH . 'itsy_filter.class.php';
+require_once ITSY_PATH . 'itsy_flash.class.php';
+require_once ITSY_PATH . 'itsy_registry.class.php';
+require_once ITSY_PATH . 'itsy_registry.class.php';
+require_once ITSY_PATH . 'itsy_validate.class.php';
 
 class itsy_framework_testsuite extends PHPUnit_Framework_TestSuite
 {

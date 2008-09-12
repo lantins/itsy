@@ -10,6 +10,7 @@ version_compare(PHP_VERSION, '5.2.5', '<') and exit('PHP 5.2.5 or newer is requi
  */
 error_reporting(E_ALL|E_STRICT);
 ini_set('display_errors', TRUE);
+ini_set('xdebug.collect_params', '3');
 
 /**
  * BOOTSTRAP

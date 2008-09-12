@@ -2,34 +2,36 @@
 
 class test_itsy_error_basic extends PHPUnit_Framework_TestCase
 {
-  public function test_example1()
+  public function test_basic()
   {
-    /*
-      define(ITSY_PATH, true);
-      error_reporting(E_ALL|E_STRICT);
-      ini_set('display_errors', TRUE);
-
-      require 'itsy_error.class.php';
-
-      $e = new itsy_error();
-
-      $e->add('foo', 'message 1');
-      $e->add('foo', 'message 2');
-      $e->add('foo', 'message 3');
-
-      $e->add('bar', 'message 4');
-
-
-      //var_dump($e->count());
-
-      var_dump($e->on('foo'));
-
-      //var_dump($e->clear());
-      //var_dump($e->count());
-
-      //var_dump($e->on('foo'));
-    */
-    $this->markTestIncomplete('This test has not been implemented yet.');
+    $expected['foo'][] = 'foo 1';
+    $expected['foo'][] = 'foo 2';
+    $expected['bar'][] = 'bar 1';
+    $expected['meow'][] = 'meow 1';
+    
+    $e = new itsy_error();
+    
+    $e->add('foo', 'foo 1');
+    $e->add('foo', 'foo 2');
+    $e->add('bar', 'bar 1');
+    $e->add('meow', 'meow 1');
+    
+    $this->assertEquals(2, $e->count('foo'));
+    $this->assertEquals(1, $e->count('bar'));
+    $this->assertEquals(1, $e->count('meow'));
+    $this->assertEquals(4, $e->count());
+    
+    $this->assertEquals($expected['foo'], $e->on('foo'));
+    $this->assertEquals($expected['bar'], $e->on('bar'));
+    $this->assertEquals($expected['meow'], $e->on('meow'));
+    $this->assertEquals($expected, $e->on_all());
+    
+    $e->clear('foo');
+    $this->assertEquals(array(), $e->on('foo'));
+    $this->assertEquals(2, $e->count());
+    $e->clear();
+    $this->assertEquals(0, $e->count());
+    $this->assertEquals(array(), $e->on_all());
   }
 }
 

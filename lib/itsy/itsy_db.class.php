@@ -27,10 +27,12 @@ class itsy_db
   public function connect($name)
   {
     $this->_name = $name;
-    $env = itsy::$config['environment'];
-    if (is_array(itsy::$config['db'][$env][$name])) {
-      $config = itsy::$config['db'][$env][$name];
-      $this->_db = @mysql_connect ($config['host'], $config['user'], $config['pass']);
+    $env = itsy_registry::get('/itsy/environment');
+    if (itsy_registry::get("/itsy/db/$env/$name")) {
+      $user = itsy_registry::get("/itsy/db/$env/$name/user");
+      $pass = itsy_registry::get("/itsy/db/$env/$name/pass");
+      $host = itsy_registry::get("/itsy/db/$env/$name/host");
+      $this->_db = @mysql_connect ($host, $user, $pass);
       
       // see if we connected?
       if (empty ($this->_db)) {

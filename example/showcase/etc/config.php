@@ -4,28 +4,17 @@
  * APPLICATION CONFIGURATION
  *   Configuration used by Itsy.
  */
- 
-$config = array();
-$config['environment'] = 'development'; // 'development' or 'production'.
-$config['controller_dir'] = 'app/controllers/'; // where to find the controller files.
-$config['view_dir'] = 'app/views/'; // where to find the view files.
-$config['layout_dir'] = 'app/layouts/'; // where to find the layout files.
 
-// database config
-$config['db'] = array(
-  'development' => array(
-    'itsy' => array(
-      'user' => 'root',
-      'pass' => 'root',
-      'host' => 'localhost'
-    )
-  ),
-  'production' => array(
-    'itsy' => array(
-      'user' => 'itsy',
-      'pass' => 'moo',
-      'host' => 'localhost'
-      )
-    )
+$app_path = dirname(getcwd()) . '/';
+$config = array(
+  '/itsy/app_path' => $app_path,
+  '/itsy/db/showcase/development/user' => 'root',
+  '/itsy/db/showcase/development/pass' => 'root',
+  '/itsy/db/showcase/development/host' => 'localhost',
+  '/itsy/db/showcase/production/user' => 'showcase',
+  '/itsy/db/showcase/production/pass' => 'pAsSwOrD',
+  '/itsy/db/showcase/production/host' => 'localhost'
   );
+itsy_registry::load($config);
+
 ?>
