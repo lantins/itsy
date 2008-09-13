@@ -1,11 +1,16 @@
 <?php defined('ITSY_PATH') or die('No direct script access.');
 /**
- * Copyright (c) 2008 Luke Antins <luke@lividpenguin.com>
- * All rights reserved.
- *
- * http://www.lividpenguin.com/
+ * @author Luke Antins <luke@lividpenguin.com>
+ * @copyright Copyright (c) 2008, Luke Antins
+ * @package itsy
  */
 
+/**
+ * itsy_controller
+ * 
+ * Simple overview as to what the controller does.
+ * @package itsy
+ */
 class itsy_controller
 {
     public $_layout = 'default';

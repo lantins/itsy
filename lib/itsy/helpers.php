@@ -1,5 +1,18 @@
 <?php
+/**
+ * This file contains assorted helper functions; useful in the view files.
+ * 
+ * @author Luke Antins <luke@lividpenguin.com>
+ * @copyright Copyright (c) 2008, Luke Antins
+ * @package itsy
+ */
 
+/**
+ * Builds a html <a href></a> to link to a spesific controller and action.
+ * @param string $name name of the link
+ * @param string $action action to call; default is 'index'
+ * @param string $controller controller to call; default is 'default'
+ */
 function link_to($name = 'Link Name', $action = 'index', $controller = 'default')
 {
   if ($action == 'index') {

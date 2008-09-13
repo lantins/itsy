@@ -1,11 +1,16 @@
 <?php defined('ITSY_PATH') or die('No direct script access.');
 /**
- * Copyright (c) 2008 Luke Antins <luke@lividpenguin.com>
- * All rights reserved.
- *
- * http://www.lividpenguin.com/
+ * @author Luke Antins <luke@lividpenguin.com>
+ * @copyright Copyright (c) 2008, Luke Antins
+ * @package itsy
  */
 
+/**
+ * itsy_validate - validation class
+ * 
+ * Helping you validate external input.
+ * @package itsy
+ */
 abstract class itsy_validate
 {
   // alphabetical characters

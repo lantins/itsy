@@ -1,20 +1,23 @@
 <?php
 /**
- * Copyright (c) 2008 Luke Antins <luke@lividpenguin.com>
- * All rights reserved.
- *
- * http://www.lividpenguin.com/
+ * Bootstrap file; lets get ready to rock!
+ * This file should be required by your index.php file.
+ * 
+ * @author Luke Antins <luke@lividpenguin.com>
+ * @copyright Copyright (c) 2008, Luke Antins
+ * @package itsy
  */
 
 /**
- * Bootstrap file. Lets get ready!
- * Loaded by the front controller.
+ * Defines the version number of the itsy framework.
  */
-
 define('ITSY_VERSION',  '1.0');
 
-// Define path to core ITSY files
 if (!defined('ITSY_PATH')) {
+  /**
+   * The ITSY_PATH is where we can find the other itsy files/libraries.
+   * We define this _before_ calling this bootstrap file if were running tests.
+   */
   define('ITSY_PATH', dirname(__FILE__) . '/');
 }
 

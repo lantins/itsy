@@ -1,11 +1,16 @@
 <?php defined('ITSY_PATH') or die('No direct script access.');
 /**
- * Copyright (c) 2008 Luke Antins <luke@lividpenguin.com>
- * All rights reserved.
- *
- * http://www.lividpenguin.com/
+ * @author Luke Antins <luke@lividpenguin.com>
+ * @copyright Copyright (c) 2008, Luke Antins
+ * @package itsy
  */
 
+/**
+ * itsy_request
+ * 
+ * This class deals with raw $_GET, $_POST and $_COOKIE data.
+ * @package itsy
+ */
 class itsy_request
 {
   private static $instance;

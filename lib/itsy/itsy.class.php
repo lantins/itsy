@@ -1,11 +1,20 @@
 <?php defined('ITSY_PATH') or die('No direct script access.');
 /**
- * Copyright (c) 2008 Luke Antins <luke@lividpenguin.com>
- * All rights reserved.
- *
- * http://www.lividpenguin.com/
+ * itsy - minimalistic php framework
+ * 
+ * A small framework centerd around the view/controller.
+ * @author Luke Antins <luke@lividpenguin.com>
+ * @copyright Copyright (c) 2008, Luke Antins
+ * @package itsy
  */
 
+/**
+ * itsy - main framework class
+ * 
+ * Explain the 'core' of itsy more...
+ * itsy uses a front-controller to handel all requests.
+ * @package itsy
+ */
 abstract class itsy
 {
   public static $log_dev = array();
@@ -202,11 +211,12 @@ abstract class itsy
 }
 
 /**
- * Itsy's own exception!
+ * Base exception class.
+ * @package itsy
  */
 class itsy_exception extends Exception
 {
-  function __construct($message = null, $code = 0)
+  public function __construct($message = null, $code = 0)
   {
     parent::__construct($message, $code);
   }

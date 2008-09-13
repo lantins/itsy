@@ -1,12 +1,13 @@
 <?php defined('ITSY_PATH') or die('No direct script access.');
 /**
- * Copyright (c) 2008 Luke Antins <luke@lividpenguin.com>
- * All rights reserved.
- *
- * http://www.lividpenguin.com/
+ * @author Luke Antins <luke@lividpenguin.com>
+ * @copyright Copyright (c) 2008, Luke Antins
+ * @package itsy
  */
 
 /**
+ * itsy_flash - pass messages between requests/actions.
+ * 
  * The flash class provides a way to pass messages between diffrent actions
  * and controllers. This can be useful for displaying error/notice messages.
  * 
@@ -18,6 +19,7 @@
  *   - warning
  *   - all ... this is a special namespace, it will affect all namespaces.
  *     (apart form when your adding a new message).
+ * @package itsy
  */
 abstract class itsy_flash
 {

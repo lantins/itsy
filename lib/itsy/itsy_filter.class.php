@@ -1,16 +1,16 @@
 <?php defined('ITSY_PATH') or die('No direct script access.');
 /**
- * Copyright (c) 2008 Luke Antins <luke@lividpenguin.com>
- * All rights reserved.
- *
- * http://www.lividpenguin.com/
+ * @author Luke Antins <luke@lividpenguin.com>
+ * @copyright Copyright (c) 2008, Luke Antins
+ * @package itsy
  */
 
 /**
- * Itsy Filtering class.
- * Filter data.
+ * itsy_filter - useful filtering
+ * 
+ * Useful filtering methods that can be used to sanatize user input.
+ * @package itsy
  */
-
 class itsy_filter
 {
   // alphabetical characters
