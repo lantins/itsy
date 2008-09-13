@@ -9,7 +9,8 @@
 /**
  * itsy_request
  * 
- * This class deals with raw $_GET, $_POST and $_COOKIE data.
+ * This class provides access to $_GET, $_POST and $_COOKIE data; safer.
+ * No filtering / validation is done; just the handling of slashes.
  * @package itsy
  */
 class itsy_request
@@ -19,6 +20,15 @@ class itsy_request
   private $_post;
   private $_cookie;
   
+  /**
+   * Request Constructor
+   * 
+   * Looks for global $_GET, $_POST and $_COOKIE; this data will be used to
+   * populate the instance variables if present; otherwise the parameters 
+   * are used.
+   * 
+   * If magic quotes is enabled we will strip the slashes.
+   */
   function __construct($_get = array(), $_post = array(), $_cookie = array())
   {
     $this->_get = ($_GET) ? $_GET : $_get;
@@ -34,7 +44,15 @@ class itsy_request
     }
   }
   
-  public static function get_instance() {
+  /**
+   * Get Instance
+   * 
+   * Returns and/or creates a instance of itsy_request.
+   * An instance can be created directly if you preffer; this is here for
+   * conveniance should other itsy libraries require request information.
+   */
+  public static function get_instance()
+  {
     if ((self::$instance instanceof self) == false) { 
       self::$instance = new self;
     }
@@ -42,6 +60,13 @@ class itsy_request
     return self::$instance;
   }
   
+  /**
+   * Is Post?
+   * 
+   * Checks if the request was a post or not.
+   * 
+   * @return bool true if the request was a post.
+   */
   public function is_post()
   {
     if ($this->_post == true) {
@@ -51,6 +76,14 @@ class itsy_request
     return false;
   }
   
+  /**
+   * Retrieve Get Parameter Value
+   * 
+   * Returns the value of the named get parameter. If the parameter is not set
+   * we default the value to ''.
+   * 
+   * @return mixed
+   */
   public function get($name)
   {
     if (empty($this->_get[$name])) {
@@ -61,6 +94,14 @@ class itsy_request
     return $result;
   }
   
+  /**
+   * Retrieve Post Parameter Value
+   * 
+   * Returns the value of the named post parameter. If the parameter is not set
+   * we default the value to ''.
+   * 
+   * @return mixed
+   */
   public function post($name)
   {
     if (empty($this->_post[$name])) {
@@ -73,9 +114,13 @@ class itsy_request
 }
 
 /**
- * Request related functions
+ * Add Slashes Recursively
+ * 
+ * Walks over a multi-dimensional array or just a string and applies
+ * addslashes() to the value(s).
+ * 
+ * @return array
  */
-
 function addslashes_recursive($value) {
   if (is_array($value)) {
     foreach ($value as $index => $val) {
@@ -87,6 +132,14 @@ function addslashes_recursive($value) {
   }
 }
 
+/**
+ * Strip Slashes Recursively
+ * 
+ * Walks over a multi-dimensional array or just a string and applies
+ * stripslashes() to the value(s).
+ * 
+ * @return array
+ */
 function stripslashes_recursive($value) {
   if (is_array($value)) {
     foreach ($value as $index => $val) {

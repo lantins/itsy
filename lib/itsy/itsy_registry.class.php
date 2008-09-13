@@ -7,9 +7,10 @@
  */
 
 /**
- * itsy_filter - useful filtering
+ * itsy_registry
  * 
- * Useful filtering methods that can be used to sanatize user input.
+ * Implements a 'registry' to store data.
+ * Useful for passing data around.
  * @package itsy
  */
 abstract class itsy_registry

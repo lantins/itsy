@@ -22,7 +22,13 @@ class itsy_error
   }
   
   /**
-   * Add an error message for a spesific attribute.
+   * Add Error Message
+   * 
+   * Adds an error message to the specified attribute.
+   * 
+   * @param string $attribute to add the error to
+   * @param string $message you wish to add
+   * @return bool success value
    */
   public function add($attribute, $message)
   {
@@ -35,7 +41,12 @@ class itsy_error
   }
   
   /**
-   * Removes all errors that have been added.
+   * Clear Errors From Attribute(s)
+   * 
+   * Clears all errors from all attribute unless you spesify the specific
+   * attribute.
+   * 
+   * @param string $attribute optionally specify a specific attribute to clear
    */
   public function clear($attribute = '')
   {
@@ -47,10 +58,15 @@ class itsy_error
     $this->messages = array();
   }
   
-  /**
-   * Count the number of errors.
-   * This includes multiple errors for one attribute.
-   */
+ /**
+  * Count Error Message
+  * 
+  * Counts the number of error messages for all attributes by default unless you
+  * specify an attribute.
+  * 
+  * @param string $attribute optionally specify a specific attribute to count
+  * @return int number of errors
+  */
   public function count($attribute = '')
   {
     if (array_key_exists($attribute, $this->messages) && $attribute != '') {
@@ -65,19 +81,30 @@ class itsy_error
     return $total;
   }
   
-  /**
-   * Grab the error(s) for a spesific attribute.
-   */
-  public function on($attribute = '')
+ /**
+  * Errors For An Attribute
+  * 
+  * Returns the errors for the specified attribute.
+  * 
+  * @param string $attribute to get errors for
+  * @return array of error messages
+  */
+  public function on($attribute)
   {
-    if (array_key_exists($attribute, $this->messages) && $attribute != '') {
+    if (array_key_exists($attribute, $this->messages)) {
       // we found a key, now lets get the errors.
       return $this->messages[$attribute];
     }
+    
+    return array();
   }
   
   /**
-   * Return an array of all errors.
+   * Errors For All Attribute
+   * 
+   * Returns the all errors for attributes.
+   * 
+   * @return array of error messages
    */
   public function on_all()
   {

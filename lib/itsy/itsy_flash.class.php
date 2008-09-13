@@ -24,7 +24,12 @@
  */
 abstract class itsy_flash
 {
-  // add a message to a namespace.
+  /**
+   * Add a Message
+   * 
+   * Adds a message to the spesified namespace.
+   * @return bool successes value
+   */
   public static function add($namespace = 'message', $message)
   {
     itsy_flash::init_session();
@@ -33,7 +38,12 @@ abstract class itsy_flash
     return true;
   }
   
-  // discard message(s) for a namespace
+  /**
+   * Discard Messages
+   * 
+   * Discards all messages in the spesified namespace.
+   * @return bool successes value
+   */
   public static function discard($namespace = 'all')
   {
     $messages = itsy_flash::init_session();
@@ -49,7 +59,13 @@ abstract class itsy_flash
     }
   }
   
-  // get the messages for a namespace
+  /**
+   * Get Messages
+   * 
+   * Gets all messages in the spesified namespace and automatically discard the
+   * messages returned.
+   * @return array of messages
+   */
   public static function get($namespace = 'all')
   {
     $messages = itsy_flash::init_session();
@@ -70,7 +86,13 @@ abstract class itsy_flash
     return array();
   }
   
-  // check we have somewhere for our flash data in the session.
+  /**
+   * Init Session
+   * 
+   * This method trys to ensure we have somewhere to store our flash data.
+   * The current messages are returned.
+   * @return array of messages
+   */
   private static function init_session()
   {
     if (isset($_SESSION['itsy_flash']) == false) {
