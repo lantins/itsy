@@ -59,8 +59,8 @@ class itsy_controller
    * Execute a action inside a controller. Actions are just public methods
    * inside your controller class. You may optionally pass parameters.
    * 
-   * @param string $action name of the action you wish to execute.
-   * @param array $param
+   * @param string $action name of the action you wish to execute
+   * @param array $param optional parameters
    * @return mixed
    */
   function _execute($action, $param)
@@ -101,7 +101,7 @@ class itsy_controller
    * @return mixed
    * @throws itsy_exception if the view file was not found
    * @throws itsy_exception if were trying to call a iternal action 
-   *                        (starting with a _) externally.
+   *                        (starting with a _) externally
    */
   function _render($action, $itsy = false)
   {
