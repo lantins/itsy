@@ -107,8 +107,8 @@ abstract class itsy
    * @param string $controller controller name
    * @param string $action action to call from the specified controller name
    * @param string $param optionally pass additional parameters
-   * @param bool $partial true if you want the view content without the layout.
-   * @param string $itsy false if this is called internaly to itsy.
+   * @param bool $partial true if you want the view content without the layout
+   * @param string $itsy false if this is called internaly to itsy
    * @return void|string
    */
   public static function dispatch($controller, $action = '', $param = null, $partial = false, $itsy = false)
