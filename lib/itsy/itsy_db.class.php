@@ -1,5 +1,7 @@
 <?php defined('ITSY_PATH') or die('No direct script access.');
 /**
+ * itsy_db - pdo database wrapper
+ * 
  * @author Luke Antins <luke@lividpenguin.com>
  * @copyright Copyright (c) 2008, Luke Antins
  * @license http://opensource.org/licenses/mit-license.php MIT license

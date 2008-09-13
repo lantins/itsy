@@ -14,15 +14,31 @@
  */
 abstract class itsy_registry
 {
+  /** Stores our registry data */
   private static $data = array();
   
-  // path to start searching from.
+  /**
+   * Set Base Path
+   * 
+   * Sets the base path used when searching paths.
+   * Think of it as being a few directories deep in a filesystem.
+   * 
+   * @param string $path path we wish to make the base path
+   * @return bool were we able to change the base path?
+   */
   public static function set_base_path($path)
   {
     return true;
   }
   
-  // returns the value of the path.
+  /**
+   * Get Value
+   * 
+   * Gets the value of the spesified path.
+   * 
+   * @param string $path path name to query
+   * @return mixed|null null is returned if the path does not exist
+   */
   public static function get($path)
   {
     $path = itsy_registry::parse_path($path);
@@ -33,15 +49,29 @@ abstract class itsy_registry
     return null;
   }
   
-  // sets the paths value.
+  /**
+   * Set Value
+   * 
+   * Sets the value of the spesified path.
+   * 
+   * @param string $path path name
+   * @param mixed $value value you wish to set to the spesified path
+   */
   public static function set($path, $value)
   {
     $path = itsy_registry::parse_path($path);
     itsy_registry::$data[$path] = $value;
   }
   
-  // load data from an array.
-  // this will clear any current data.
+  /**
+   * Load Data
+   * 
+   * Loads data into the registry from an array.
+   * The array is simply (path => value).
+   * 
+   * @param string $data path data to load
+   * @return bool true if we managed to load anything
+   */
   public static function load($data)
   {
     if (is_array($data)) {
@@ -53,7 +83,13 @@ abstract class itsy_registry
     return false;
   }
   
-  // delete the given path.
+  /**
+   * Delete Path
+   * 
+   * Deletes a path from the registry.
+   * 
+   * @param string $path path name to delete
+   */
   public static function delete($path)
   {
     $path = itsy_registry::parse_path($path);
@@ -63,6 +99,16 @@ abstract class itsy_registry
     }
   }
   
+  /**
+   * Search Path
+   * 
+   * Looks through all the paths in the registry and returns an array of ones
+   * that match.
+   * 
+   * @todo This could be done better
+   * @param string $search string to search on
+   * @return array paths that match the search criteria
+   */
   public static function search($search)
   {
     $paths = array_keys(itsy_registry::$data);
@@ -77,6 +123,14 @@ abstract class itsy_registry
     return $results;
   }
   
+  /**
+   * Parse Path
+   * 
+   * This simply removes any / from the end of the path.
+   * 
+   * @param string $path path to parse
+   * @return string parsed path
+   */
   private static function parse_path($path)
   {
     if ($path != '/') {

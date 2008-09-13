@@ -102,7 +102,7 @@ abstract class itsy
    * the appropriate controller and action; however you may use it elsewhere in
    * your code.
    * 
-   * @todo $itsy should really be true if its an internal call.
+   * @todo It seems more logical that $itsy should be true if its an internal call.
    * 
    * @param string $controller controller name
    * @param string $action action to call from the specified controller name
