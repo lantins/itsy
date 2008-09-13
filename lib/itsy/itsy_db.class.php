@@ -32,18 +32,32 @@ class itsy_db
    */
   public function __construct($config)
   {
-    $this->engine = itsy_registry::get("/itsy/db/$config/engine");
-    $this->host = itsy_registry::get("/itsy/db/$config/host");
-    $this->database = itsy_registry::get("/itsy/db/$config/database");
-    $this->user = itsy_registry::get("/itsy/db/$config/user");
-    $this->pass = itsy_registry::get("/itsy/db/$config/pass");
+    $settings = array('engine', 'host', 'database', 'user', 'pass');
+    
+    // look for a database config in the itsy_registry
+    if (is_string($config) && class_exists('itsy_registry')) {
+      foreach ($settings as $setting) {
+        $value = itsy_registry::get("/itsy/db/$config/$setting");
+        if (!empty($value)) {
+          $this->$setting = $value;
+        }
+      }
+    }
+    // use configuration array passed to the constructor
+    if (is_array($config)) {
+      foreach ($settings as $setting) {
+        if (!empty($config[$setting])) {
+          $this->$setting = $config[$setting];
+        }
+      }
+    }
     
     $this->build_dsn();
     
     try {
       $this->connect($this->dsn);
-    } catch (Exception $e) {
-      // re-throw as itsy_db_exception?
+    } catch (PDOException $e) {
+      throw new itsy_db_exception('Unable to connect to database.', 0, $e);
     }
   }
   
@@ -51,24 +65,28 @@ class itsy_db
    * Build DSN String
    * 
    * Builds a DSN string needed to connect to the database.
+   * @todo make sure we look in the correct dir for the databases.
    */
   private function build_dsn()
   {
     if ($this->engine == 'sqlite') {
-      $this->dsn = "{sqlite}:dbname={$this->database}";
+      if ($this->database == ':memory:') {
+        $this->dsn = "sqlite::memory:";
+      } else {
+        $this->dsn = "sqlite:dbname={$this->database}";
+      }
+      
       if (strlen($this->host) > 0) {
         $this->dsn .= ";host={$this->host}";
       }
     }
     
     if ($this->engine == 'mysql') {
-      $this->dsn = "{mysql}:dbname={$this->database}";
+      $this->dsn = "mysql:dbname={$this->database}";
       if (strlen($this->host) > 0) {
         $this->dsn .= ";host={$this->host}";
       }
     }
-    
-    return $dsn;
   }
   
   /**
@@ -79,11 +97,11 @@ class itsy_db
   private function connect()
   {
     if ($this->engine == 'sqlite') {
-      $this->pdo = new PDO($dsn);
+      $this->pdo = new PDO($this->dsn);
     }
     
     if ($this->engine == 'mysql') {
-      $this->pdo = new PDO($dsn, $this->user, $this->pass);
+      $this->pdo = new PDO($this->dsn, $this->user, $this->pass);
     }
   }
 }
@@ -91,10 +109,10 @@ class itsy_db
 /**
  * itsy_db_exception - database related exceptions
  * 
- * Any database related errors will be thrown as itsy_db_exception.
+ * Any database related exceptions will throw itsy_db_exception.
  * @package itsy
  */
-class itsy_db_exception extends itsy_exception
+class itsy_db_exception extends Exception
 {
   /** a five-character alphanumeric identifier defined in the ANSI SQL standard */
   private $sql_state;
@@ -103,7 +121,20 @@ class itsy_db_exception extends itsy_exception
   /** driver specific error message */
   private $driver_error_message;
   
+  public function __construct($message = null, $code = 0, $e = null)
+  {
+    parent::__construct($message, $code);
+    
+    if ($e instanceof PDOException) {
+      $pdo_error_message = $e->getMessage();
+      $this->message = "$message (PDO: $pdo_error_message)";
+    }
+  }
   
+  public function get_sql_state()
+  {
+    return $this->sql_state;
+  }
 }
 
 ?>

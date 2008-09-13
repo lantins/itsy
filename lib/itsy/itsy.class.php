@@ -290,8 +290,7 @@ abstract class itsy
 /**
  * itsy_exception - base exception class
  * 
- * Any exceptions thrown by this class or other itsy classes will either be
- * this one or a derivative of.
+ * Exception class for itsy stuff.
  * 
  * @package itsy
  */
