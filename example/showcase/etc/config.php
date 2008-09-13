@@ -8,12 +8,15 @@
 $app_path = dirname(dirname(__FILE__)) . '/';
 $config = array(
   '/itsy/app_path' => $app_path,
-  '/itsy/db/showcase/development/user' => 'root',
-  '/itsy/db/showcase/development/pass' => 'root',
-  '/itsy/db/showcase/development/host' => 'localhost',
-  '/itsy/db/showcase/production/user' => 'showcase',
-  '/itsy/db/showcase/production/pass' => 'pAsSwOrD',
-  '/itsy/db/showcase/production/host' => 'localhost'
+  // sqlite3 database
+  '/itsy/db/test/engine' => 'sqlite',
+  '/itsy/db/test/database' => 'db/test.sqlite3',
+  // mysql database
+  '/itsy/db/showcase/engine' => 'mysql',
+  '/itsy/db/showcase/host' => 'localhost',
+  '/itsy/db/showcase/database' => 'itsy_showcase',
+  '/itsy/db/showcase/user' => 'itsy_showcase',
+  '/itsy/db/showcase/pass' => 'pAsSwOrD'
   );
 itsy_registry::load($config);
 

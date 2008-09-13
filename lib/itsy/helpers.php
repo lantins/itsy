@@ -68,40 +68,4 @@ function helper_input_select($name, $options = NULL, $selected = NULL)
   return $html;
 }
 
-function helper_default($value, $default)
-{
-  if (!empty($default)) {
-    if (!empty($value) || $value != '') {
-      return $value;
-    } else {
-      return $default;
-    }
-  } else {
-    if (!empty($value) || $value != '') {
-      return $value;
-    } else {
-      return '';
-    }
-  }
-}
-
-// cycle between two options
-function helper_cycle($first = 'first', $second = 'second')
-{
-  static $cycle_i;
-
-  if ($cycle_i <= 0) {
-    $cycle_i = 0;    
-  }
-  
-  if (($cycle_i % 2) == 0) {
-    $value = $first;
-  } else {
-    $value = $second;
-  }
-  
-  $cycle_i++;
-  return $value;
-}
-
 ?>

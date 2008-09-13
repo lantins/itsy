@@ -10,7 +10,7 @@
  */
 
 /**
- * itsy_controller - Base Controller Class
+ * itsy_controller - base controller class
  * 
  * A controller processes and responds to actions (methods in the class).
  * It handles the input from the user and may call libraries or 'models'.

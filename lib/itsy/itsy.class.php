@@ -11,7 +11,7 @@
  */
 
 /**
- * itsy - Core Framework Class
+ * itsy - core framework class
  * 
  * This class (along with {@link itsy_controller}) provid the core 
  * functionality of the itsy framework:
@@ -288,7 +288,7 @@ abstract class itsy
 }
 
 /**
- * Base Exception Class
+ * itsy_exception - base exception class
  * 
  * Any exceptions thrown by this class or other itsy classes will either be
  * this one or a derivative of.
