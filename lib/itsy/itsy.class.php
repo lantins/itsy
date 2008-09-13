@@ -1,26 +1,37 @@
 <?php defined('ITSY_PATH') or die('No direct script access.');
 /**
- * itsy - minimalistic php framework
+ * itsy - minimalistic php framework.
  * 
  * A small framework centerd around the view/controller.
  * @author Luke Antins <luke@lividpenguin.com>
  * @copyright Copyright (c) 2008, Luke Antins
+ * @license http://opensource.org/licenses/mit-license.php MIT license
+ * @version 1.0
  * @package itsy
  */
 
 /**
- * itsy - main framework class
+ * itsy - Core Framework Class
  * 
- * Explain the 'core' of itsy more...
- * itsy uses a front-controller to handel all requests.
+ * This class (along with {@link itsy_controller}) provid the core 
+ * functionality of the itsy framework:
+ * - autoloader
+ * - dispatching requests to controllers and actions.
+ * - calling partials
+ * 
+ * @version 1.0
  * @package itsy
  */
 abstract class itsy
 {
+  /** development log information */
   public static $log_dev = array();
   public static $db = array();
   
-  // main setup method.
+  /**
+   * Get itsy ready.
+   * Setup the autoloader and exception handler; load the config file.
+   */
   public static function setup()
   {
     itsy::log("<b>CORE - Starting Itsy</b>", 'dev');
@@ -29,7 +40,10 @@ abstract class itsy
     itsy::load_config();
   }
   
-  // opposite to setup method.
+  /**
+   * Shutdown itsy.
+   * Does the opposite of the {@link setup()} method.
+   */
   public static function shutdown()
   {
     itsy_registry::delete('/');
@@ -37,7 +51,11 @@ abstract class itsy
     restore_exception_handler();
   }
   
-  // load the config file that will override any defaults.
+  /**
+   * Load configuration file.
+   * Loads the etc/config.php file if it exists. The config defaults are 
+   * overwrote by the configuration file.
+   */
   private static function load_config()
   {
     // default config settings.
@@ -59,6 +77,17 @@ abstract class itsy
     require_once $file;
   }
   
+  /**
+   * Load a Partial
+   * 
+   * Partials can be used to include the content of one view/controller in
+   * another. You may pass parameters to the partial.
+   * 
+   * @param string $controller controller name
+   * @param string $action action to call from the specified controller name
+   * @param string $param optional parameters to pass to the action
+   * @return string html output of the partial
+   */
   public static function partial($controller, $action = '', $param = null)
   {
     itsy::log("<b>CORE - Partial:</b> controller: $controller, action: $action, " . 
@@ -67,9 +96,20 @@ abstract class itsy
   }
   
   /**
-   * TODO:
-   *   If the action starts with an _ it is private and may not be called by
-   *   the end user (ie using a browser), it may only be called internally.
+   * Dispatch a Request
+   * 
+   * This method is called from the front controller to dispatch requests to
+   * the appropriate controller and action; however you may use it elsewhere in
+   * your code.
+   * 
+   * @todo $itsy should really be true if its an internal call.
+   * 
+   * @param string $controller controller name
+   * @param string $action action to call from the specified controller name
+   * @param string $param optionally pass additional parameters
+   * @param bool $partial true if you want the view content without the layout.
+   * @param string $itsy false if this is called internaly to itsy.
+   * @return void|string
    */
   public static function dispatch($controller, $action = '', $param = null, $partial = false, $itsy = false)
   {
@@ -83,42 +123,50 @@ abstract class itsy
     }
     
     $controller_name = $controller . '_controller';
-      
-      // check the controller exists first.
-      if (class_exists($controller_name) == false) {
-        self::load_controller($controller_name);
-      } 
-      
-      $control = new $controller_name();
-      
-      $result = null;
-      $result = $control->_execute($action, $param); // all the action on the controller.
-      if (is_array($result)) {
-        // see if we should forward or something.
-        switch ($result['directive']) {
-          case 'forward': {
-            itsy::dispatch($result['controller'], $result['action'], $param);
-            return;
-            break;
-          }
+    
+    // check the controller exists first.
+    if (class_exists($controller_name) == false) {
+      self::load_controller($controller_name);
+    } 
+    
+    $control = new $controller_name();
+    
+    $result = null;
+    $result = $control->_execute($action, $param); // all the action on the controller.
+    if (is_array($result)) {
+      // see if we should forward or something.
+      switch ($result['directive']) {
+        case 'forward': {
+          itsy::dispatch($result['controller'], $result['action'], $param);
+          return;
+          break;
         }
       }
-      
-      // render the view.
-      $control->_render($action, $itsy);
-              
-      if ($partial) {
-        return $control->view_content;
-      } elseif ($control->_layout == null) {
-        echo $control->view_content;
-      } else {
-        $control->_render_layout();
-      }
-      
+    }
+    
+    // render the view.
+    $control->_render($action, $itsy);
+            
+    if ($partial) {
+      return $control->view_content;
+    } elseif ($control->_layout == null) {
+      echo $control->view_content;
+    } else {
+      $control->_render_layout();
+    }
+    return;
   }
-
+  
   /**
-   * Load a controller file.
+   * Load a Controller File
+   * 
+   * Takes 'test_controller' and removes the '_controller'.
+   * It then looks for the file in the controller directory.
+   * The file is loaded and we check if the 'test' class exists.
+   * 
+   * @param string $controller name of the controller
+   * @throws itsy_exception if loading the controller failed. in production mode
+   *                        this will show a 404.
    */
   public static function load_controller($controller)
   {
@@ -140,7 +188,14 @@ abstract class itsy
   }
   
   /**
-   * Class autoloader
+   * Itsy Autoloader
+   * 
+   * Once the autoloader is registerd {@link setup()} it is called whenever
+   * you try using a class thats not been defined. An effort will be made to
+   * load the undefined class.
+   * 
+   * @param string $class class name of the undefined class.
+   * @return bool true on successes
    */
   public static function autoloader($class)
   {
@@ -175,6 +230,16 @@ abstract class itsy
     return class_exists($class, false);
   }
   
+  /**
+   * Internal Log
+   * 
+   * This log method is currently used to log internal itsy calls for 
+   * debugging and will probably be removed/replaced later on.
+   * However it does the job; and is simple.
+   * 
+   * @param string $message the message you wish to log
+   * @param string $kind use 'dev' if you wish to access during development
+   */
   public static function log($message, $kind = 'info')
   {
     if (method_exists('itsy_registry', 'get') == false) {
@@ -191,6 +256,18 @@ abstract class itsy
     }
   }
   
+  /**
+   * Exception Handler
+   * 
+   * The exception handler is registerd by the {@link setup()} method.
+   * It is called whenever an exception has not been caught by a try/catch block.
+   * This is our last chance to handle the exception.
+   * 
+   * In development mode the message, code and trace information will be showen.
+   * In production mode we will show either a 404 or 503 error.
+   * 
+   * @param Exception $e the thrown exception
+   */
   public static function itsy_exception_handler($e)
   {
     $param['message'] = $e->getMessage();
@@ -211,7 +288,11 @@ abstract class itsy
 }
 
 /**
- * Base exception class.
+ * Base Exception Class
+ * 
+ * Any exceptions thrown by this class or other itsy classes will either be
+ * this one or a derivative of.
+ * 
  * @package itsy
  */
 class itsy_exception extends Exception

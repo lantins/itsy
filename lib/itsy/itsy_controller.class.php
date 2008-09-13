@@ -2,6 +2,7 @@
 /**
  * @author Luke Antins <luke@lividpenguin.com>
  * @copyright Copyright (c) 2008, Luke Antins
+ * @license http://opensource.org/licenses/mit-license.php MIT license
  * @package itsy
  */
 
