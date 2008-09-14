@@ -2,13 +2,15 @@
 
 class test_itsy_db_connect extends PHPUnit_Framework_TestCase
 {
-  public function test_missing_config()
+  public function test_empty_config_array()
   {
+    $this->setExpectedException('itsy_db_exception');
+    
     $settings = array();
     $db = new itsy_db($settings);
   }
   
-  public function test_invalid_config()
+  public function test_mysql_invalid_auth_details()
   {
     $settings = array(
       'engine' => 'mysql',
@@ -28,7 +30,30 @@ class test_itsy_db_connect extends PHPUnit_Framework_TestCase
     }
   }
   
-  public function test_config_via_constructor()
+  public function test_invalid_config_name()
+  {
+    $this->setExpectedException('itsy_db_exception');
+    $db = new itsy_db('invalid_config_name');
+  }
+  
+  public function test_valid_config_name()
+  {
+    itsy_registry::set('/itsy/db/foo/engine', 'sqlite');
+    itsy_registry::set('/itsy/db/foo/database', ':memory:');
+    $db = new itsy_db('foo');
+  }
+  
+  public function test_sqlite_basic()
+  {
+    $settings = array(
+      'engine' => 'sqlite',
+      'database' => 'db/test.sqlite3'
+      );
+      
+    $db = new itsy_db($settings);
+  }
+  
+  public function test_mysql_memory()
   {
     $settings = array(
       'engine' => 'sqlite',
@@ -36,16 +61,6 @@ class test_itsy_db_connect extends PHPUnit_Framework_TestCase
       );
       
     $db = new itsy_db($settings);
-  }
-  
-  public function test_sqlite_basic()
-  {
-    $this->markTestIncomplete('This test has not been implemented yet.');
-  }
-  
-  public function test_mysql_memory()
-  {
-    $this->markTestIncomplete('This test has not been implemented yet.');
   }
   
   public function test_mysql_basic()

@@ -22,6 +22,7 @@ require_once ITSY_PATH . 'itsy_db.class.php';
 require_once ITSY_PATH . 'itsy_error.class.php';
 require_once ITSY_PATH . 'itsy_filter.class.php';
 require_once ITSY_PATH . 'itsy_flash.class.php';
+require_once ITSY_PATH . 'itsy_helper.class.php';
 require_once ITSY_PATH . 'itsy_registry.class.php';
 require_once ITSY_PATH . 'itsy_request.class.php';
 //require_once ITSY_PATH . 'itsy_validate.class.php'; // we will load this to test the autoloader.
@@ -55,7 +56,8 @@ class itsy_framework_suite extends PHPUnit_Framework_TestSuite
   {
     $test_suites = array(
       'itsy', 'itsy_controller', 'itsy_db', 'itsy_error', 'itsy_filter',
-      'itsy_flash', 'itsy_registry', 'itsy_request', 'itsy_validate'
+      'itsy_flash', 'itsy_helper', 'itsy_registry', 'itsy_request',
+      'itsy_validate'
       );
     
     $suite = new itsy_framework_suite('Itsy Framework');
