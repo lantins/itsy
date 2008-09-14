@@ -65,11 +65,13 @@ class itsy_db
   private function connect()
   {
     try {
-      if (strpos('mysql', $this->dsn) !== false && !empty($this->user) && !empty($this->pass)) {
+      // if the user and/or pass is missing; connect without them.
+      if (empty($this->user) && empty($this->pass)) {
+        $this->pdo = new PDO($this->dsn);
+      } else {
         $this->pdo = new PDO($this->dsn, $this->user, $this->pass);
       }
       
-      $this->pdo = new PDO($this->dsn);
     } catch (PDOException $e) {
       throw new itsy_db_exception("Unable to connect to PDO database. (DSN: {$this->dsn})", 0, $e);
     }
