@@ -28,11 +28,11 @@ class itsy_db
   /**
    * Class Constructor
    * 
-   * Grabs the db settings from itsy_registry.
+   * Grabs the db settings from $config or itsy_registry (if its available).
    */
   public function __construct($config)
   {
-    $settings = array('engine', 'host', 'database', 'user', 'pass');
+    $settings = array('dsn', 'user', 'pass');
     
     // look for a database config in the itsy_registry
     if (is_string($config) && class_exists('itsy_registry')) {
@@ -52,44 +52,7 @@ class itsy_db
       }
     }
     
-    $this->build_dsn();
     $this->connect($this->dsn);
-  }
-  
-  /**
-   * Build DSN String
-   * 
-   * Builds a DSN string needed to connect to the database.
-   * @todo make sure we look in the correct dir for the databases.
-   * @throws itsy_db_exception if were unable to build a dsn
-   */
-  private function build_dsn()
-  {
-    if ($this->engine == 'sqlite') {
-      if ($this->database == ':memory:') {
-        $this->dsn = "sqlite::memory:";
-      } else {
-        if ($this->database{0} != '/') {
-          $app_path = itsy_registry::get('/itsy/app_path');
-          if (is_dir($app_path)) {
-            $this->database = $app_path . $this->database;
-          }
-        }
-        
-        $this->dsn = "sqlite:{$this->database}";
-      }
-      return;
-    }
-    
-    if ($this->engine == 'mysql') {
-      $this->dsn = "mysql:dbname={$this->database}";
-      if (strlen($this->host) > 0) {
-        $this->dsn .= ";host={$this->host}";
-      }
-      return;
-    }
-    
-    throw new itsy_db_exception('Unable to build pdo dsn; please check your configuration.');
   }
   
   /**
@@ -102,13 +65,11 @@ class itsy_db
   private function connect()
   {
     try {
-      if ($this->engine == 'sqlite') {
-        $this->pdo = new PDO($this->dsn);
-      }
-
-      if ($this->engine == 'mysql') {
+      if (strpos('mysql', $this->dsn) !== false && !empty($this->user) && !empty($this->pass)) {
         $this->pdo = new PDO($this->dsn, $this->user, $this->pass);
       }
+      
+      $this->pdo = new PDO($this->dsn);
     } catch (PDOException $e) {
       throw new itsy_db_exception("Unable to connect to PDO database. (DSN: {$this->dsn})", 0, $e);
     }
@@ -217,19 +178,31 @@ class itsy_db
   public function update()
   {
   }
-  
-  // PDO::prepare — Prepares a statement for execution and returns a statement object
-  // PDO::query — Executes an SQL statement, returning a result set as a PDOStatement object
-  // PDO::exec — Execute an SQL statement and return the number of affected rows
-  
-  // PDO::quote — Quotes a string for use in a query.
-  // PDO::errorCode — Fetch the SQLSTATE associated with the last operation on the database handle
-  // PDO::errorInfo — Fetch extended error information associated with the last operation on the database handle
-  
-  // PDO::getAttribute — Retrieve a database connection attribute
-  // PDO::getAvailableDrivers — Return an array of available PDO drivers
-  // PDO::setAttribute — Set an attribute
 }
+
+/**
+ * itsy_db_row - represent a single row
+ * 
+ * Simple class to provide oo access to sql data.
+ * @package itsy
+ */
+class itsy_db_row
+{
+  public function __get($name) {
+    throw new itsy_db_exception("Unable to get unexistent field: $name");
+  }
+}
+
+/**
+ * itsy_db_recordset - a set of itsy_db_row records
+ * 
+ * Provides an iteratable; countable object for dealing with multiple rows.
+ * @package itsy
+ */
+class itsy_db_recordset
+{
+}
+
 
 /**
  * itsy_db_exception - database related exceptions
