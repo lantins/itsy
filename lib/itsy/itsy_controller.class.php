@@ -84,7 +84,9 @@ class itsy_controller
     $args = array();
     
     foreach ($args_info as $arg) {
-      $args[$arg->name] = $param[$arg->name];
+      if (isset($param[$arg->name])) {
+        $args[$arg->name] = $param[$arg->name];
+      }
     }
     $result = $reflector->invokeArgs($this, $args);
     return $result;

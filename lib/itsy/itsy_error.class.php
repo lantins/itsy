@@ -93,10 +93,10 @@ class itsy_error
   {
     if (array_key_exists($attribute, $this->messages)) {
       // we found a key, now lets get the errors.
-      return $this->messages[$attribute];
+      return (object) $this->messages[$attribute];
     }
     
-    return array();
+    return (object) array();
   }
   
   /**
@@ -110,10 +110,10 @@ class itsy_error
   {
     // make sure we got some errors to return.
     if ($this->count() == 0) {
-      return array();
+      return (object) array();
     }
     
-    return $this->messages;
+    return (object) $this->messages;
   }
 }
 

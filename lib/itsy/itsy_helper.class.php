@@ -25,7 +25,7 @@ class itsy_helper
   public static function default_to($default, $value)
   {
     $default = (!empty($default)) ? $default : '';
-    if (!empty($value)) {
+    if (!empty($value) && $value != '0000-00-00 00:00:00') {
       return $value;
     }
     return $default;
@@ -53,6 +53,62 @@ class itsy_helper
     $count++;
     
     return $value;
+  }
+  
+  public static function link_to($name = 'Link Name', $action = 'index', $controller = 'default')
+  {
+    if ($action == 'index') {
+      return sprintf('<a href="/?c=%s">%s</a>', $controller, $name);
+    }
+    else {
+      return sprintf('<a href="/?c=%s&amp;a=%s">%s</a>', $controller, $action, $name);
+    }
+  }
+  
+  public static function link_to_with_current($name = 'Link Name', $action = 'index', $controller = 'default')
+  {
+    $request = new itsy_request();
+    $request->get_instance();
+    
+    $c = ($request->get('c') != '') ? $request->get('c') : 'default';
+    $a = ($request->get('a') != '') ? $request->get('a') : 'index';
+    
+    if ($c == $controller && $a == $action) {
+      return sprintf('<a href="/?c=%s&amp;a=%s" class="current">%s</a>', $controller, $action, $name);
+    }
+    
+    return itsy_helper::link_to($name, $action, $controller, $options);
+  }
+  
+  public static function input_select($name, $options = NULL, $selected = NULL)
+  {
+    $html = '<select name="' . $name . '" size="1">';
+    if ($options) {
+      foreach ($options as $value => $name) {
+        if (is_array($name)) {
+          // select with option groups.
+          $html .= '<optgroup label="' . $value . '">';
+          foreach ($name as $value2 => $name2) {
+            if ($value2 == $selected) {
+              $html .= '<option value="' . $value2 . '" selected="selected">' . $name2. '</option>';
+            } else {
+              $html .= '<option value="' . $value2 . '">' . $name2. '</option>';
+            }
+          }
+          $html .= '</optgroup>';
+        } else {
+          // standard select.
+          if ($value == $selected) {
+            $html .= '<option value="' . $value . '" selected="selected">' . $name. '</option>';
+          } else {
+            $html .= '<option value="' . $value . '">' . $name. '</option>';
+          } 
+        }
+      }
+    }
+    $html .= '</select>';
+
+    return $html;
   }
   
 }

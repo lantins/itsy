@@ -132,7 +132,7 @@ abstract class itsy
     $control = new $controller_name();
     
     $result = null;
-    $result = $control->_execute($action, $param); // all the action on the controller.
+    $result = $control->_execute($action, $param); // Call the action on the controller.
     if (is_array($result)) {
       // see if we should forward or something.
       switch ($result['directive']) {

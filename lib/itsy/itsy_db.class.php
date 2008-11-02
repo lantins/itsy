@@ -71,6 +71,8 @@ class itsy_db
       } else {
         $this->pdo = new PDO($this->dsn, $this->user, $this->pass);
       }
+      // exceptions please!
+      $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       
     } catch (PDOException $e) {
       throw new itsy_db_exception("Unable to connect to PDO database. (DSN: {$this->dsn})", 0, $e);
@@ -85,7 +87,12 @@ class itsy_db
    */
   public function begin()
   {
-    return $this->pdo->beginTransaction();
+    try {
+      $this->pdo->beginTransaction();
+    } catch (PDOException $e) {
+      // TODO: Throw more useful exceptions luke
+      throw new itsy_db_exception($e->getMessage());
+    }
   }
   
   /**
@@ -96,7 +103,12 @@ class itsy_db
    */
   public function commit()
   {
-    return $this->pdo->commit();
+    try {
+      $this->pdo->commit();
+    } catch (PDOException $e) {
+      // TODO: Throw more useful exceptions luke
+      throw new itsy_db_exception($e->getMessage());
+    }
   }
   
   /**
@@ -107,19 +119,33 @@ class itsy_db
    */
   public function roll_back()
   {
-    return $this->pdo->rollBack();
+    try {
+      $this->pdo->rollBack();
+    } catch (PDOException $e) {
+      // TODO: Throw more useful exceptions luke
+      throw new itsy_db_exception($e->getMessage());
+    }
   }
   
   /**
    * Get Last Insert ID
    * 
    * Returns the id of the last inserted row or sequence object.
+   * (n.b. sequences: http://search.cpan.org/~adamk/DBIx-MySQLSequence-1.00/lib/DBIx/MySQLSequence.pm)
    * @param string $name of the sequence object
    * @return bool
    */
   public function get_last_insert_id($name = '')
   {
-    return $this->pdo->lastInsertId($name);
+    try {
+      $id = $this->pdo->lastInsertId($name);
+    } catch (PDOException $e) {
+      // TODO: Throw more useful exceptions luke
+      // we should only get an exception if the PDO driver does not support this capability?
+      throw new itsy_db_exception($e->getMessage());
+    }
+    
+    return $id;
   }
   
   /**
@@ -128,10 +154,14 @@ class itsy_db
    * This method should not be used to gather data from the database, only to
    * execute SQL statments like INSERT; UPDATE. etc...
    * 
-   * The number of rows affected by the operation is returned.
+   * @param string $sql statement
+   * @param array $params single value or an array of values
+   * @return integer number of rows affected by the operation
    */
-  public function execute()
+  public function execute($sql, $params = array())
   {
+    $statement = $this->pdo_prepare_execute_statement($sql, $params);
+    return $statement->rowCount();
   }
   
   /**
@@ -140,8 +170,10 @@ class itsy_db
    * Returns the first field, of the first row, of the results.
    * This is useful for COUNT() operations.
    */
-  public function get_single_value()
+  public function get_single_value($sql, $params = array())
   {
+    $statement = $this->pdo_prepare_execute_statement($sql, $params);
+    return $statement->fetchColumn(0);
   }
   
   /**
@@ -149,8 +181,21 @@ class itsy_db
    * 
    * Returns the first row of the results.
    */
-  public function get_single_row()
+  public function get_single_row($sql, $params = array())
   {
+    $statement = $this->pdo_prepare_execute_statement($sql, $params);
+    return $statement->fetchObject('itsy_db_row');
+  }
+  
+  /**
+   * Get Array
+   * 
+   * Returns all results as an array
+   */
+  public function get_array($sql, $params = array())
+  {
+    $statement = $this->pdo_prepare_execute_statement($sql, $params);
+    return $statement->fetchAll();
   }
   
   /**
@@ -158,8 +203,16 @@ class itsy_db
    * 
    * Returns an iteratable object of results for a SELECT statement.
    */
-  public function select()
+  public function select($sql, $params = array())
   {
+    try {
+      $statement = $this->pdo->prepare($sql);
+    } catch (PDOException $e) {
+      throw new itsy_db_exception($e->getMessage());
+    }
+    
+    $params = is_array($params) ? $params : array($params);
+    return new itsy_db_recordset($statement, $params);
   }
   
   /**
@@ -168,8 +221,18 @@ class itsy_db
    * Builds and executes SQL for an INSERT statement.
    * The SQL is built from an associative array of: field => value
    */
-  public function insert()
+  public function insert($table, array $data)
   {
+    $column_names = implode(', ', array_keys($data));
+    foreach ($data as $name => $value) {
+      $column_values[] = ':' . $name;
+    }
+    $column_values = implode(', ', $column_values);
+    
+    $sql = 'INSERT INTO %s(%s) VALUES(%s)';
+    $sql = sprintf($sql, $table, $column_names, $column_values);
+    
+    return $this->execute($sql, $data);
   }
   
   /**
@@ -177,8 +240,30 @@ class itsy_db
    * 
    * The same as {@link insert()}, however this time we build a UPDATE statement.
    */
-  public function update()
+  public function update($table, $data, $criteria)
   {
+    foreach ($data as $name => $value) {
+      $column_values[] = "$name = :$name";
+    }
+    $column_values = implode(', ', $column_values);
+    
+    $sql = 'UPDATE %s SET (%s) WHERE %s';
+    $sql = sprintf($sql, $table, $column_values, $criteria);
+    
+    return $this->execute($sql, $data);
+  }
+  
+  private function pdo_prepare_execute_statement($sql, $params = array())
+  {
+    try {
+      $statement = $this->pdo->prepare($sql);
+      $params = is_array($params) ? $params : array($params);
+      $statement->execute($params);
+    } catch (PDOException $e) {
+      throw new itsy_db_exception($e->getMessage());
+    }
+    
+    return $statement;
   }
 }
 
@@ -201,8 +286,64 @@ class itsy_db_row
  * Provides an iteratable; countable object for dealing with multiple rows.
  * @package itsy
  */
-class itsy_db_recordset
+class itsy_db_recordset implements Iterator, Countable
 {
+  private $statement = null; // PDO statement object.
+  private $params = array(); // SQL query parameters.
+  private $current_row_object = null; // represents the current row in the set.
+  private $current_row_index = 0; // index of the current row.
+  
+  public function __construct(PDOStatement $statement, array $params) {
+    $this->statement = $statement;
+    $this->params = $params;
+  }
+ 
+  public function refresh() {
+    $this->statement->execute($this->params);
+    if ($this->statement->errorCode() !== '00000') {
+      throw new itsy_db_exception($this->statement->errorInfo());
+    }
+  }
+ 
+  public function current() {
+    return $this->current_row_object;
+  }
+ 
+  public function key() {
+    return $this->current_row_index;
+  }
+
+  public function next() {
+    $this->current_row_object = $this->statement->fetchObject('itsy_db_row');
+    if ($this->statement->errorCode() !== '00000') {
+      throw new itsy_db_exception($this->statement->errorInfo());
+    }
+    $this->current_row_index++;
+    
+    return $this->current_row_object;
+  }
+ 
+  public function rewind() {
+    $this->refresh();
+    $this->current_row_index = 0;
+    $this->current_row_object = $this->statement->fetchObject('itsy_db_row');
+    if ($this->statement->errorCode() !== '00000') {
+      throw new itsy_db_exception($this->statement->errorInfo());
+    }
+ 
+  }
+ 
+  public function valid() {
+    return $this->current_row_object !== false;
+  }
+ 
+  public function count() {
+    return $this->statement->rowCount();
+  }
+ 
+  function __destruct() {
+    $this->statement->closeCursor();
+  }
 }
 
 
