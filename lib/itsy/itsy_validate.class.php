@@ -9,37 +9,42 @@
 /**
  * itsy_validate - validation class
  * 
- * Helping you validate external input.
+ * Helping you validate user input.
  * @package itsy
  */
-abstract class itsy_validate
+class itsy_validate extends itsy_error
 {
   // alphabetical characters
-  static public function alpha($string)
+  public function alpha($string)
   {
     
   }
   
   // numbers, negative and decimal numbers allowed
-  static public function numeric($number)
+  public function numeric($number)
   {
     
   }
   
   // alphabetical characters and numbers only
-  static public function alpha_numeric($string)
+  public function alpha_numeric($string)
   {
     
   }
   
   // digits only (whole numbers) (no dots or dashes)
-  static public function digit($digit)
+  public function digit($digit)
   {
     
   }
   
   // letters, numbers, whitespace, dashes, periods, and underscores
-  static public function text($text)
+  public function text($text)
+  {
+    
+  }
+  
+  public function regex($regex)
   {
     
   }
