@@ -229,7 +229,7 @@ class itsy_db
     }
     $column_values = implode(', ', $column_values);
     
-    $sql = 'INSERT INTO %s(%s) VALUES(%s)';
+    $sql = 'INSERT INTO %s (%s) VALUES(%s)';
     $sql = sprintf($sql, $table, $column_names, $column_values);
     
     return $this->execute($sql, $data);
