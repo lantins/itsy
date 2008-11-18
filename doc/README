@@ -1,5 +1,8 @@
 INTRODUCTION
-    Itsy is a minimalistic view-controller PHP framework.
+    itsy is a minimalistic view-controller PHP framework.
     
     Most of the itsy classes can be used without firing up the whole framework.
     Take what you need; discard the rest.
+
+DIRECTORY STRUCTURE
+

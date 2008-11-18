@@ -1,13 +1,13 @@
 INTRODUCTION
-	Itsy is a minimalistic view-controller PHP framework.
+	itsy is a minimalistic view-controller PHP framework.
 	For further information please see doc/README
 
 LICENSE
-	Itsy is released under the MIT License, please see doc/LICENSE for more
+	itsy is released under the MIT License, please see doc/LICENSE for more
 	details.
 
 STATUS
-	Itsy should be considered 'alpha' software; any may be subject to major changes.
+	itsy should be considered 'alpha' software; any may be subject to major changes.
 
 INSTALLING/USING
 	Clone the git repository, configure your http server to use public_html as

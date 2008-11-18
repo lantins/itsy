@@ -6,7 +6,7 @@ class itsy_flash_suite extends itsy_framework_testsuite
 {
   public static function suite()
   {
-    $suite = new itsy_flash_suite('Itsy Flash');
+    $suite = new itsy_flash_suite('itsy flash');
     $suite->addAllTestFromDir();
     
     return $suite;

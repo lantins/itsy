@@ -2,7 +2,7 @@
 
 /**
  * APPLICATION CONFIGURATION
- *   Configuration used by Itsy.
+ *   Configuration used by itsy.
  */
 $app_path = dirname(dirname(__FILE__)) . '/';
 $config = array(

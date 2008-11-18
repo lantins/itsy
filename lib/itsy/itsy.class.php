@@ -34,7 +34,7 @@ abstract class itsy
    */
   public static function setup()
   {
-    itsy::log("<b>CORE - Starting Itsy</b>", 'dev');
+    itsy::log("<b>CORE - Starting itsy</b>", 'dev');
     spl_autoload_register(array('itsy', 'autoloader'));
     set_exception_handler(array('itsy', 'itsy_exception_handler'));
     itsy::load_config();
@@ -188,7 +188,7 @@ abstract class itsy
   }
   
   /**
-   * Itsy Autoloader
+   * itsy autoloader
    * 
    * Once the autoloader is registerd {@link setup()} it is called whenever
    * you try using a class thats not been defined. An effort will be made to

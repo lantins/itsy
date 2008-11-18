@@ -60,7 +60,7 @@ class itsy_framework_suite extends PHPUnit_Framework_TestSuite
       'itsy_validate'
       );
     
-    $suite = new itsy_framework_suite('Itsy Framework');
+    $suite = new itsy_framework_suite('itsy framework');
     
     foreach ($test_suites as $test_suite) {
       $suite_file = TEST_ROOT_PATH . "test/$test_suite/all.php";
