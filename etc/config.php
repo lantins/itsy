@@ -4,7 +4,6 @@
  * APPLICATION CONFIGURATION
  *   Configuration used by Itsy.
  */
-
 $app_path = dirname(dirname(__FILE__)) . '/';
 $config = array(
   '/itsy/app_path' => $app_path,

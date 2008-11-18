@@ -9,13 +9,13 @@ class test_itsy_validate_basic extends PHPUnit_Framework_TestCase
     $input_array = array(
       'name' => 'luke',
       'age' => 23,
-      'occupation' => 'developer'
+      'occupation' => 'developer',
+      'no_rules' => 'no rules applied to this attribute'
       );
     
-    $input_object = (object) $input_array;
-    
-    $input = new itsy_validate($input_object);
-    $input->name->required('may not be blank')
+    // should be able to pass an array OR object.
+    $input = new itsy_validate($input_array);
+    $input->name->required()
                 ->length(3, 16)
                 ->text();
                 

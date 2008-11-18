@@ -1,9 +1,0 @@
-RewriteEngine on
-
-# [L] stops mod_rewrite processing so any URLs ending with those filetypes will be treated like normal.
-RewriteRule ^/.*(\.css)|(\.php)|(\.jpg)|(\.png)|(\.html)|(\.gif)|(\.js)|(\.txt)|(\.ico)$ - [L]
-
-RewriteCond %{SCRIPT_FILENAME} !-f
-RewriteCond %{SCRIPT_FILENAME} !-d
-
-RewriteRule ^(.*)$ index.php/$1

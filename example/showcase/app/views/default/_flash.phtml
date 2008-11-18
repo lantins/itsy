@@ -1,7 +1,0 @@
-<div id="flash">
-  <? foreach (itsy_flash::get() as $namespace => $messages): ?>
-    <? foreach ($messages as $message): ?>
-      <div class="<?= $namespace ?>"><?= $message ?></div>
-    <? endforeach; ?>
-  <? endforeach; ?>
-</div>

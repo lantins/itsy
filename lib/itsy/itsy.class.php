@@ -13,7 +13,7 @@
 /**
  * itsy - core framework class
  * 
- * This class (along with {@link itsy_controller}) provid the core 
+ * This class (along with {@link itsy_controller}) provides the core 
  * functionality of the itsy framework:
  * - autoloader
  * - dispatching requests to controllers and actions.
