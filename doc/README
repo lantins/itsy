@@ -1,3 +1,5 @@
 INTRODUCTION
-
-FIXME: Write about Itsy; what it does; what it does _not_ do.
+    Itsy is a minimalistic view-controller PHP framework.
+    
+    Most of the itsy classes can be used without firing up the whole framework.
+    Take what you need; discard the rest.
