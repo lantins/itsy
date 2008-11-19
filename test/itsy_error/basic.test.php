@@ -25,14 +25,14 @@ class test_itsy_error_basic extends PHPUnit_Framework_TestCase
     $this->assertEquals((array) $expected->foo, (array) $e->on('foo'));
     $this->assertEquals((array) $expected->bar, (array) $e->on('bar'));
     $this->assertEquals((array) $expected->meow, (array) $e->on('meow'));
-    $this->assertEquals((array) $expected, (array) $e->on_all());
+    $this->assertEquals($expected, $e->on_all());
     
     $e->clear('foo');
-    $this->assertEquals(array(), (array) $e->on('foo'));
+    $this->assertEquals(false, $e->on('foo'));
     $this->assertEquals(2, $e->count());
     $e->clear();
     $this->assertEquals(0, $e->count());
-    $this->assertEquals(array(), (array) $e->on_all());
+    $this->assertEquals(false, $e->on_all());
   }
 }
 

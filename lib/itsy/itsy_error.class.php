@@ -93,10 +93,12 @@ class itsy_error
   {
     if (array_key_exists($attribute, $this->messages)) {
       // we found a key, now lets get the errors.
-      return (object) $this->messages[$attribute];
+      if ($this->count($attribute) > 0) {
+        return (object) $this->messages[$attribute];
+      }
     }
     
-    return (object) array();
+    return false;
   }
   
   /**
@@ -109,11 +111,11 @@ class itsy_error
   public function on_all()
   {
     // make sure we got some errors to return.
-    if ($this->count() == 0) {
-      return (object) array();
+    if ($this->count() > 0) {
+      return (object) $this->messages;
     }
     
-    return (object) $this->messages;
+    return false;
   }
 }
 
