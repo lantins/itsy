@@ -3,13 +3,12 @@
 error_reporting(E_ALL|E_STRICT);
 ini_set('display_errors', TRUE);
 
-define('TEST_ROOT_PATH', dirname(getcwd()) . '/');
-define('ITSY_PATH', TEST_ROOT_PATH . 'lib/itsy/');
+define('ROOT_PATH', dirname(getcwd()) . '/');
+define('ITSY_PATH', ROOT_PATH . 'lib/itsy/');
 
 date_default_timezone_set('Europe/London');
 
 // setup itsy
-define('ROOT_PATH', TEST_ROOT_PATH . 'example/showcase/');
 require_once ITSY_PATH . 'bootstrap.php';
 
 // phpunit
@@ -63,7 +62,7 @@ class itsy_framework_suite extends PHPUnit_Framework_TestSuite
     $suite = new itsy_framework_suite('itsy framework');
     
     foreach ($test_suites as $test_suite) {
-      $suite_file = TEST_ROOT_PATH . "test/$test_suite/all.php";
+      $suite_file = ROOT_PATH . "test/$test_suite/all.php";
       if (is_readable($suite_file)) {
         require_once $suite_file;
         $call = call_user_func(array($test_suite . '_suite', 'suite'));

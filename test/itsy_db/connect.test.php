@@ -25,7 +25,7 @@ class test_itsy_db_connect extends PHPUnit_Framework_TestCase
   public function test_sqlite_basic()
   {
     $settings = array(
-      'dsn' => 'sqlite:' . TEST_ROOT_PATH . 'test/itsy_db/test.sqlite3'
+      'dsn' => 'sqlite:' . ROOT_PATH . 'test/itsy_db/db/test.sqlite3'
       );
       
     $db = new itsy_db($settings);
