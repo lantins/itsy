@@ -87,7 +87,7 @@ class itsy_error
   * Returns the errors for the specified attribute.
   * 
   * @param string $attribute to get errors for
-  * @return array of error messages
+  * @return mixed object of error messages, false if we have no errors.
   */
   public function on($attribute)
   {
@@ -106,7 +106,7 @@ class itsy_error
    * 
    * Returns the all errors for attributes.
    * 
-   * @return array of error messages
+   * @return mixed object of error messages, false if we have no errors.
    */
   public function on_all()
   {
