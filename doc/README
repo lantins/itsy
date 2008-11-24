@@ -1,8 +1,22 @@
 INTRODUCTION
     itsy is a minimalistic view-controller PHP framework.
-    
+
     Most of the itsy classes can be used without firing up the whole framework.
     Take what you need; discard the rest.
 
-DIRECTORY STRUCTURE
+REQUIREMENTS
+    At the moment the exact requirements float about a bit, basically this is what
+    I'm testing with, other configurations may also work.
 
+    MINIMUM - Required to fully use the framework.
+        - PHP Version: 5.2.6
+        - PHP Extensions: PDO
+
+    DEVELOPMENT - Needed to run: tests, code coverage report, documentation builder.
+        - Everything listed for MINIMUM above.
+        - PHP Extensions: Xdebug
+        - Pear Packages: PHPUnit, phpDocumentor
+        - Other: Bash
+
+DIRECTORY STRUCTURE
+    TODO: Add more documentation!
